@@ -46,10 +46,10 @@ export default function Sidebar() {
       {/* Branding */}
       <div style={{ padding: '0 1.5rem', marginBottom: '4rem' }}>
         <h2 style={{ color: 'var(--color-primary)', fontSize: '1.5rem', letterSpacing: '-0.03em', fontWeight: 700 }}>
-          The Atelier
+          Clocky
         </h2>
         <div style={{ marginTop: '2.5rem' }}>
-            <h3 style={{ fontSize: '1.3rem', color: 'var(--color-primary)', fontWeight: 600 }}>Bonjour, Chérie</h3>
+            <h3 style={{ fontSize: '1.3rem', color: 'var(--color-primary)', fontWeight: 600 }}>Bienvenida Lety</h3>
             <p className="text-label-disciplined" style={{ fontSize: '0.65rem', color: '#9a9a9d', marginTop: '0.5rem' }}>
               STAY DISCIPLINED TODAY.
             </p>
