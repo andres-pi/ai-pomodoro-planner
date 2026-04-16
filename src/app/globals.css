@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
+  color-scheme: light;
   /* Primary - "The Sweetheart Lavender" */
   --color-primary: #6453a2;
   --color-primary-dim: #7966bd;
