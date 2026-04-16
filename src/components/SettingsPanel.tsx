@@ -9,7 +9,7 @@ const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
       value={value}
       min={min}
       max={max}
-      onChange={(e) => onChange(Number(e.target.value))}
+      onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
       style={{
         backgroundColor: 'var(--color-surface-container-high)',
         border: 'none',
@@ -41,10 +41,10 @@ export default function SettingsPanel() {
 
   const handleSave = () => {
     updateSettings({
-      workDuration: work * 60,
-      shortBreakDuration: short * 60,
-      longBreakDuration: long * 60,
-      sessionsToLongBreak: sessions,
+      workDuration: (Number(work) || 1) * 60,
+      shortBreakDuration: (Number(short) || 1) * 60,
+      longBreakDuration: (Number(long) || 1) * 60,
+      sessionsToLongBreak: Number(sessions) || 1,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
