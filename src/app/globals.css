@@ -1,26 +1,90 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary - "The Sweetheart Lavender" */
+  --color-primary: #6453a2;
+  --color-primary-dim: #7966bd;
+  --color-primary-container: #eae3f7;
+  
+  /* Secondary - "The Disciplined Moss" */
+  --color-secondary: #556446;
+  --color-secondary-container: #dceec9;
+  --color-on-secondary-container: #1e2616;
+
+  /* Tertiary - "Movement & Activity Lime" */
+  --color-tertiary: #54634c;
+  --color-tertiary-fixed-dim: #b8d4ab;
+
+  /* Surfaces & Background - "The No-Line Rule foundation" */
+  --color-background: #fbf8fc; /* Pale lilac-grey */
+  --color-surface-container-low: #f4f3f8; /* Structural sections */
+  --color-surface-container-high: #ededf6; /* Inputs */
+  --color-surface-container-lowest: #ffffff; /* Interactive Cards */
+  
+  /* Text & Accents - "No pure black" */
+  --color-on-surface: #313238; 
+  --color-outline-variant: rgba(49, 50, 56, 0.15); /* Ghost Border */
+
+  /* Roundness Scale */
+  --radius-md: 24px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --radius-full: 9999px;
+
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Manrope', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  line-height: 1.6; /* Generous line height for airy feel */
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em; /* Tighter tracking for premium feel */
+  font-weight: 600;
+}
+
+/* Typography Utilities */
+.text-label-disciplined {
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* label-md */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+/* Ambient Shadows */
+.shadow-ambient {
+  /* 0 20px 40px on_surface at 5% opacity */
+  box-shadow: 0 20px 40px rgba(49, 50, 56, 0.05);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(251, 248, 252, 0.7);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid var(--color-outline-variant);
+}
+
+/* Button Reset */
+button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
 }
