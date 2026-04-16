@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { useTimerStore } from '@/store/timerStore';
 
 export default function SettingsPanel() {
-  const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings, phase } = useTimerStore();
+  const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings } = useTimerStore();
 
-  // Helper local states just for the input fields (so typing is smooth)
-  // Converting seconds from store to minutes for the UI
+  // Helper local states just for the input fields
   const [work, setWork] = useState(workDuration / 60);
   const [short, setShort] = useState(shortBreakDuration / 60);
   const [long, setLong] = useState(longBreakDuration / 60);
   const [sessions, setSessions] = useState(sessionsToLongBreak);
+  const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
     updateSettings({
@@ -19,9 +19,8 @@ export default function SettingsPanel() {
       longBreakDuration: long * 60,
       sessionsToLongBreak: sessions,
     });
-    
-    // Si queremos que el tiempo visual actual se resetee si estamos en la fase correspondiente:
-    // idealmente se haría una lógica extra, pero esto basta para actualizar la exp global.
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
   };
 
   const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
@@ -47,10 +46,7 @@ export default function SettingsPanel() {
           boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
         }}
         onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
-        onBlur={(e) => {
-            e.target.style.borderBottom = '2px solid transparent';
-            handleSave(); // Auto-save on blur
-        }}
+        onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
       />
     </div>
   );
@@ -72,7 +68,7 @@ export default function SettingsPanel() {
           Manual Configuration
         </h3>
         <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-          Ajusta los tiempos del Atelier a tu ritmo personal. Los cambios se guardan automáticamente.
+          Configura tus propios límites para los períodos de concentración. Debes "Aplicar Cambios" para sobreescribir el temporizador actual.
         </p>
       </div>
 
@@ -84,6 +80,29 @@ export default function SettingsPanel() {
       <div style={{ display: 'flex', gap: '1rem' }}>
         <InputField label="LONG BREAK (MIN)" value={long} onChange={setLong} max={60} />
         <InputField label="SESSIONS PER ROUND" value={sessions} onChange={setSessions} max={10} />
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+          <button
+            onClick={handleSave}
+            style={{
+              padding: '1rem 2.5rem',
+              borderRadius: 'var(--radius-full)',
+              backgroundColor: 'var(--color-primary)',
+              color: 'white',
+              fontFamily: 'var(--font-body)',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              letterSpacing: '0.05em',
+              transition: 'all 0.2s ease',
+              opacity: saved ? 0.8 : 1,
+              boxShadow: '0 10px 20px rgba(100, 83, 162, 0.2)'
+            }}
+            onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.97)'}
+            onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            {saved ? "✓ APPLIED" : "APPLY CHANGES"}
+          </button>
       </div>
 
     </div>

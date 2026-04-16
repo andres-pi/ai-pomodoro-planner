@@ -1,26 +1,33 @@
 "use client";
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Home, Calendar as CalendarIcon, CheckSquare, Settings, Timer } from 'lucide-react';
 
-const NavItem = ({ icon: Icon, label, active = false }: any) => {
+const NavItem = ({ icon: Icon, label, href }: any) => {
+  const pathname = usePathname();
+  const active = pathname === href;
+
   return (
-    <button style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '1.25rem',
-      padding: '1.125rem 2rem',
-      width: '100%',
-      borderRadius: 'var(--radius-full)',
-      backgroundColor: active ? 'var(--color-surface-container-lowest)' : 'transparent',
-      color: active ? 'var(--color-primary)' : '#8b8b96', // soft muted tone
-      fontWeight: '600',
-      transition: 'all 0.3s ease',
-      boxShadow: active ? '0 10px 30px rgba(49, 50, 56, 0.04)' : 'none',
-      marginBottom: '0.25rem',
-    }}>
-      <Icon size={20} strokeWidth={active ? 2.5 : 2} />
-      <span className="text-label-disciplined">{label}</span>
-    </button>
+    <Link href={href} style={{ textDecoration: 'none' }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.25rem',
+        padding: '1.125rem 2rem',
+        width: '100%',
+        borderRadius: 'var(--radius-full)',
+        backgroundColor: active ? 'var(--color-surface-container-lowest)' : 'transparent',
+        color: active ? 'var(--color-primary)' : '#8b8b96', // soft muted tone
+        fontWeight: '600',
+        transition: 'all 0.3s ease',
+        boxShadow: active ? '0 10px 30px rgba(49, 50, 56, 0.04)' : 'none',
+        marginBottom: '0.25rem',
+      }}>
+        <Icon size={20} strokeWidth={active ? 2.5 : 2} />
+        <span className="text-label-disciplined">{label}</span>
+      </div>
+    </Link>
   );
 };
 
@@ -51,10 +58,10 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem' }}>
-        <NavItem icon={Home} label="HOME" />
-        <NavItem icon={CalendarIcon} label="CALENDAR" active />
-        <NavItem icon={CheckSquare} label="TASKS" />
-        <NavItem icon={Settings} label="SETTINGS" />
+        <NavItem icon={Home} label="HOME" href="/" />
+        <NavItem icon={CalendarIcon} label="CALENDAR" href="/calendar" />
+        <NavItem icon={CheckSquare} label="TASKS" href="/tasks" />
+        <NavItem icon={Settings} label="SETTINGS" href="/settings" />
       </nav>
 
       {/* Focus CTA */}
