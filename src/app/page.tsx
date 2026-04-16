@@ -3,63 +3,70 @@ import Timer from '@/components/Timer';
 
 export default function Home() {
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem' }}>
-      <header style={{ marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '3rem' }}>Planifica tu éxito ✍️</h1>
-        <p style={{ fontSize: '1.125rem', color: '#6A6C76', marginTop: '0.5rem' }}>
-          Organiza tus sesiones de estudio y alcanza tus metas con elegancia y disciplina.
-        </p>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
+      
+      {/* Header Area */}
+      <header style={{ display: 'flex', justifySelf: 'stretch', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+        <div>
+           <div className="text-label-disciplined" style={{ color: 'var(--color-primary)', opacity: 0.8, marginBottom: '0.5rem' }}>
+             WORKSPACE / TIMER
+           </div>
+           <h1 style={{ fontSize: '2.5rem', color: 'var(--color-on-surface)', letterSpacing: '-0.03em' }}>
+             Deep Work <span style={{opacity:0.5}}>-</span> Focus Phase
+           </h1>
+        </div>
+        <div className="glass" style={{
+           display: 'flex', alignItems: 'center', gap: '0.75rem',
+           padding: '0.5rem 1.25rem', borderRadius: 'var(--radius-full)'
+        }}>
+           <span style={{ fontSize: '1.25rem' }}>🔥</span>
+           <span style={{ fontWeight: 700, fontSize: '0.875rem' }}>12 Day Streak</span>
+        </div>
       </header>
 
+      {/* Main Grid */}
       <section style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', 
-        gap: '2rem' 
+        gridTemplateColumns: '1fr 1.3fr', 
+        gap: '2.5rem' 
       }}>
-        {/* Placeholder para el Componente AI Calendar / Planner */}
-        <div 
-          className="shadow-ambient" 
-          style={{ 
-            backgroundColor: 'var(--color-surface-container-lowest)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '3rem 2rem',
-            minHeight: '600px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
+        
+        {/* Left Column (Study Materials, tips, progress) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
+               <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                 <span style={{ background:'var(--color-surface-container-low)', padding:'0.5rem', borderRadius:'8px', fontSize: '1.2rem' }}>📚</span> 
+                 <span style={{ fontWeight: 700 }}>Study Materials</span>
+               </h3>
+               <p style={{ color: '#6A6C76', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                 Focusing on the next tasks. Try to maintain absolute zero interruptions for this block.
+               </p>
+            </div>
+
+            <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-secondary-container)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
+               <h3 style={{ fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--color-on-secondary-container)', fontWeight: 700 }}>Mindfulness Tip</h3>
+               <p style={{ color: 'var(--color-secondary)', fontSize: '0.95rem', fontStyle: 'italic', lineHeight: 1.6 }}>
+                 "True discipline is really just self-care. Stay present with the difficulty of the equation."
+               </p>
+            </div>
+
+            <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
+               <h3 style={{ fontSize: '1rem', marginBottom: '1rem', fontWeight: 700 }}>Today's Progress</h3>
+               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+                 <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>Session 1 of 4</span>
+                 <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>25%</span>
+               </div>
+               <div style={{ background: 'var(--color-surface-container-low)', height: '12px', borderRadius: '12px', marginTop: '1rem', overflow:'hidden' }}>
+                 <div style={{ background: 'var(--color-secondary)', width: '25%', height: '100%', borderRadius: '12px' }}></div>
+               </div>
+            </div>
+        </div>
+
+        {/* Right Column (The Timer) */}
+        <div>
           <Timer />
         </div>
 
-        {/* Placeholder para la sección derecha de widgets diarios */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div 
-            className="shadow-ambient" 
-            style={{ 
-              backgroundColor: 'var(--color-surface-container-lowest)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '2rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center'
-            }}
-          >
-             <h3 style={{ fontSize: '1.5rem', color: 'var(--color-primary)' }}>Daily Goal</h3>
-             <div style={{
-                marginTop: '1.5rem', width: '150px', height: '150px', 
-                borderRadius: 'var(--radius-full)', 
-                border: '12px solid var(--color-primary)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-             }}>
-                <h2 style={{ fontSize: '2.5rem' }}>65%</h2>
-             </div>
-             <p style={{ marginTop: '1rem', fontStyle: 'italic', color: '#6A6C76' }}>
-               "La constancia es la llave del atelier mental."
-             </p>
-          </div>
-        </div>
       </section>
     </div>
   );

@@ -78,7 +78,19 @@ export const useTimerStore = create<TimerState>()(
         }
       }),
       
-      updateSettings: (newSettings) => set((state) => ({ ...state, ...newSettings })),
+      updateSettings: (newSettings) => set((state) => {
+        const nextState = { ...state, ...newSettings };
+        if (!state.isRunning) {
+          if (state.phase === 'WORK' && newSettings.workDuration !== undefined) {
+            nextState.timeLeft = newSettings.workDuration;
+          } else if (state.phase === 'SHORT_BREAK' && newSettings.shortBreakDuration !== undefined) {
+            nextState.timeLeft = newSettings.shortBreakDuration;
+          } else if (state.phase === 'LONG_BREAK' && newSettings.longBreakDuration !== undefined) {
+            nextState.timeLeft = newSettings.longBreakDuration;
+          }
+        }
+        return nextState;
+      }),
     }),
     {
       name: 'pomodoro-storage',
