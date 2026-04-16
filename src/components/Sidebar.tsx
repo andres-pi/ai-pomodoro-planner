@@ -11,7 +11,9 @@ const NavItem = ({ icon: Icon, label, href }: any) => {
 
   return (
     <Link href={href} style={{ textDecoration: 'none' }}>
-      <div style={{
+      <div 
+        className="nav-item-mobile"
+        style={{
         display: 'flex',
         alignItems: 'center',
         gap: '1.25rem',
@@ -38,7 +40,7 @@ export default function Sidebar() {
   const welcomeText = userName ? `¡Me alegra verte de nuevo, ${userName}!` : '¡Bienvenido!';
 
   return (
-    <aside style={{
+    <aside className="sidebar-container" style={{
       width: '300px',
       height: '100vh',
       position: 'sticky',
@@ -49,7 +51,7 @@ export default function Sidebar() {
       backgroundColor: 'transparent',
     }}>
       {/* Branding */}
-      <div style={{ padding: '0 1.5rem', marginBottom: '4rem' }}>
+      <div className="branding-container desktop-only" style={{ padding: '0 1.5rem', marginBottom: '4rem', flexDirection: 'column' }}>
         <h2 style={{ color: 'var(--color-primary)', fontSize: '1.5rem', letterSpacing: '-0.03em', fontWeight: 700 }}>
           Clocky
         </h2>
@@ -62,7 +64,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem' }}>
+      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem', width: '100%', flexDirection: 'inherit' }}>
         <NavItem icon={Home} label="HOME" href="/" />
         <NavItem icon={CalendarIcon} label="CALENDAR" href="/calendar" />
         <NavItem icon={CheckSquare} label="TASKS" href="/tasks" />
@@ -70,7 +72,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Focus CTA */}
-      <div style={{ padding: '0 1.5rem 0 0' }}>
+      <div className="desktop-only" style={{ padding: '0 1.5rem 0 0' }}>
         <button style={{
           width: '100%',
           padding: '1.25rem',

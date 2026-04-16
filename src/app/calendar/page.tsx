@@ -21,10 +21,10 @@ const EVENTS: Record<string, any[]> = {
 export default function CalendarPage() {
    return (
       <AuthOverlay>
-         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
+         <div className="mobile-p-1" style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
 
             {/* HEADER */}
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+            <header className="mobile-gap-column" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem', gap: '1rem' }}>
                <div>
                   <h1 style={{ fontSize: '2.75rem', color: 'var(--color-on-surface)', letterSpacing: '-0.04em', lineHeight: 1.1 }}>
                      Planifica tu éxito ✍️
@@ -47,17 +47,17 @@ export default function CalendarPage() {
             </header>
 
             {/* MAIN LAYOUT */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '2.5rem' }}>
+            <div className="responsive-grid">
 
                {/* LEFT -> CALENDAR */}
-               <div className="shadow-ambient" style={{
+               <div className="shadow-ambient mobile-order-2 mobile-p-1" style={{
                   backgroundColor: 'var(--color-surface-container-lowest)',
                   borderRadius: 'var(--radius-xl)',
                   padding: '2.5rem'
                }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-on-surface)', letterSpacing: '-0.02em' }}>Octubre 2024</h2>
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 1.75rem)', fontWeight: 700, color: 'var(--color-on-surface)', letterSpacing: '-0.02em' }}>Octubre 2024</h2>
                         <div style={{ display: 'flex', gap: '0.5rem', color: 'var(--color-on-surface)' }}>
                            <button style={{ padding: '0.5rem', borderRadius: '50%', backgroundColor: 'transparent' }}><ChevronLeft size={20} /></button>
                            <button style={{ padding: '0.5rem', borderRadius: '50%', backgroundColor: 'transparent' }}><ChevronRight size={20} /></button>
@@ -78,13 +78,13 @@ export default function CalendarPage() {
 
                   {/* GRID OF DAYS */}
                   <div style={{
-                     display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
+                     display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
                      borderTop: '1px solid var(--color-surface-container-high)', borderLeft: '1px solid var(--color-surface-container-high)',
                      borderTopLeftRadius: '16px', borderTopRightRadius: '16px',
-                     overflow: 'hidden'
+                     overflow: 'hidden', width: '100%'
                   }}>
                      {['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'].map((d) => (
-                        <div key={d} className="text-label-disciplined" style={{ padding: '1.5rem 1rem', textAlign: 'center', color: '#9a9a9d', borderRight: '1px solid var(--color-surface-container-high)', borderBottom: '1px solid var(--color-surface-container-high)' }}>
+                        <div key={d} className="text-label-disciplined" style={{ padding: '0.75rem 0.25rem', textAlign: 'center', color: '#9a9a9d', borderRight: '1px solid var(--color-surface-container-high)', borderBottom: '1px solid var(--color-surface-container-high)', fontSize: 'clamp(0.5rem, 1.5vw, 0.75rem)', letterSpacing: '0' }}>
                            {d}
                         </div>
                      ))}
@@ -92,9 +92,9 @@ export default function CalendarPage() {
                         const acts = d.currentMonth && EVENTS[`${d.day}`];
                         return (
                            <div key={i} style={{
-                              minHeight: '130px', padding: '1rem',
+                              minHeight: 'clamp(60px, 15vw, 130px)', padding: '0.25rem',
                               borderRight: '1px solid var(--color-surface-container-high)', borderBottom: '1px solid var(--color-surface-container-high)',
-                              display: 'flex', flexDirection: 'column'
+                              display: 'flex', flexDirection: 'column', minWidth: 0
                            }}>
                               <span style={{
                                  textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '32px', height: '32px', borderRadius: '50%', margin: '0 auto',
@@ -110,7 +110,7 @@ export default function CalendarPage() {
                                     <div key={ax} style={{
                                        backgroundColor: act.type === 'primary' ? 'var(--color-primary-container)' : 'var(--color-tertiary-fixed-dim)',
                                        color: act.type === 'primary' ? 'var(--color-primary)' : 'var(--color-tertiary)',
-                                       padding: '0.6rem 0.75rem', borderRadius: '16px', fontSize: '0.75rem', fontWeight: 700, textAlign: 'center',
+                                       padding: 'clamp(2px, 0.5vw, 0.6rem) clamp(4px, 1vw, 0.75rem)', borderRadius: '16px', fontSize: 'clamp(0.55rem, 1.5vw, 0.75rem)', fontWeight: 700, textAlign: 'center',
                                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
                                     }}>
                                        {act.title}
@@ -124,10 +124,10 @@ export default function CalendarPage() {
                </div>
 
                {/* RIGHT -> AGENDA & PROGRESS */}
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+               <div className="mobile-order-1" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
                   {/* AGENDA CARD */}
-                  <div className="shadow-ambient" style={{
+                  <div className="shadow-ambient mobile-p-1" style={{
                      backgroundColor: 'var(--color-surface-container-low)',
                      borderRadius: 'var(--radius-xl)', padding: '2.5rem'
                   }}>
@@ -180,8 +180,8 @@ export default function CalendarPage() {
                      borderRadius: 'var(--radius-xl)', padding: '2.5rem'
                   }}>
                      <span className="text-label-disciplined" style={{ color: 'var(--color-primary)', fontSize: '0.75rem' }}>PRODUCTIVIDAD</span>
-                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginTop: '1rem' }}>
-                        <h2 style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--color-on-surface)', lineHeight: 1, letterSpacing: '-0.04em' }}>84%</h2>
+                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                        <h2 style={{ fontSize: 'clamp(2.5rem, 12vw, 3.5rem)', fontWeight: 800, color: 'var(--color-on-surface)', lineHeight: 1, letterSpacing: '-0.04em' }}>84%</h2>
                         <span style={{ color: 'var(--color-secondary)', fontWeight: 700, fontSize: '0.9rem' }}>+12% vs ayer</span>
                      </div>
                      <div style={{ background: '#d1c7e8', height: '10px', borderRadius: '10px', marginTop: '1.25rem', overflow: 'hidden' }}>

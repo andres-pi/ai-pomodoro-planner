@@ -8,15 +8,15 @@ export default function Home() {
   const progressPercent = Math.min(100, Math.round(((currentSession - 1) / sessionsToLongBreak) * 100));
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
+    <div className="mobile-p-1" style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
       
       {/* Header Area */}
-      <header style={{ display: 'flex', justifySelf: 'stretch', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <header className="mobile-gap-column" style={{ display: 'flex', justifySelf: 'stretch', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem', flexWrap: 'wrap', gap: '1.5rem' }}>
         <div>
            <div className="text-label-disciplined" style={{ color: 'var(--color-primary)', opacity: 0.8, marginBottom: '0.5rem' }}>
              WORKSPACE / TIMER
            </div>
-           <h1 style={{ fontSize: '2.5rem', color: 'var(--color-on-surface)', letterSpacing: '-0.03em' }}>
+           <h1 style={{ fontSize: 'clamp(2rem, 8vw, 2.75rem)', color: 'var(--color-on-surface)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
              Deep Work <span style={{opacity:0.5}}>-</span> Focus Phase
            </h1>
         </div>
@@ -30,14 +30,10 @@ export default function Home() {
       </header>
 
       {/* Main Grid */}
-      <section style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1.3fr', 
-        gap: '2.5rem' 
-      }}>
+      <section className="responsive-grid">
         
         {/* Left Column (Study Materials, tips, progress) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div className="mobile-order-2" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
                <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                  <span style={{ background:'var(--color-surface-container-low)', padding:'0.5rem', borderRadius:'8px', fontSize: '1.2rem' }}>📚</span> 
@@ -57,7 +53,7 @@ export default function Home() {
 
             <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
                <h3 style={{ fontSize: '1rem', marginBottom: '1rem', fontWeight: 700 }}>Today's Progress</h3>
-               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: '1rem', flexWrap: 'wrap' }}>
                  <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>Session {currentSession > sessionsToLongBreak ? sessionsToLongBreak : currentSession} of {sessionsToLongBreak}</span>
                  <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>{progressPercent}%</span>
                </div>
@@ -68,7 +64,7 @@ export default function Home() {
         </div>
 
         {/* Right Column (The Timer) */}
-        <div>
+        <div className="mobile-order-1">
           <Timer />
         </div>
 

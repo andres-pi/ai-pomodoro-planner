@@ -105,12 +105,12 @@ export default function SettingsPanel() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
           <InputField label="FOCUS TIME (MIN)" value={work} onChange={setWork} max={120} />
           <InputField label="SHORT BREAK (MIN)" value={short} onChange={setShort} max={30} />
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
           <InputField label="LONG BREAK (MIN)" value={long} onChange={setLong} max={60} />
           <InputField label="SESSIONS PER ROUND" value={sessions} onChange={setSessions} max={10} />
         </div>
@@ -182,7 +182,7 @@ export default function SettingsPanel() {
             <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
               {authMode === 'register' && (
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>NOMBRE</label>
                     <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="Jane" style={{ backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />

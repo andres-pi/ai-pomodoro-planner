@@ -38,7 +38,7 @@ export default function TasksPage() {
 
   return (
     <AuthOverlay>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
+      <div className="mobile-p-1" style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
         
         {/* HEADER */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
@@ -53,10 +53,10 @@ export default function TasksPage() {
       </header>
 
       {/* MAIN GRID */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)', gap: '2.5rem' }}>
+      <div className="responsive-grid">
          
          {/* LEFT COLUMN: Input & Tasks List */}
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+         <div className="mobile-order-1" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
              
              {/* SOFT INSET INPUT AREA */}
              <div className="shadow-ambient" style={{ 
@@ -140,7 +140,7 @@ export default function TasksPage() {
          </div>
 
          {/* RIGHT COLUMN: Completed & Motivation */}
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+         <div className="mobile-order-2" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             
             {/* INSPIRATION CARD */}
             <div className="shadow-ambient" style={{ 

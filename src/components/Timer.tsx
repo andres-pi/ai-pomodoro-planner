@@ -44,7 +44,7 @@ export default function Timer() {
   };
 
   return (
-    <div className="shadow-ambient" style={{ 
+    <div className="shadow-ambient mobile-p-1" style={{ 
         backgroundColor: 'var(--color-surface-container-lowest)', 
         borderRadius: 'var(--radius-xl)', 
         padding: '3rem 2rem',
@@ -61,8 +61,9 @@ export default function Timer() {
           borderRadius: 'var(--radius-full)',
           marginBottom: '2rem',
           color: 'var(--color-primary)',
-          fontSize: '0.875rem',
-          fontWeight: 600
+          fontSize: 'clamp(0.75rem, 3vw, 0.875rem)',
+          fontWeight: 600,
+          textAlign: 'center'
       }}>
           No rompas la racha ahora, ¡tú puedes! ✨
       </div>
@@ -70,7 +71,7 @@ export default function Timer() {
       {/* Visual Clock Outline */}
       <div style={{ 
         position: 'relative',
-        width: '320px', height: '320px', 
+        width: '100%', maxWidth: '320px', aspectRatio: '1 / 1', 
         borderRadius: 'var(--radius-full)', 
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         margin: '1.5rem 0 3rem 0'
@@ -96,7 +97,7 @@ export default function Timer() {
 
         <div style={{ zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <span className="text-label-disciplined" style={{ marginBottom: '0.5rem', color: '#6A6C76', fontSize: '0.65rem' }}>TIME REMAINING</span>
-            <span style={{ fontSize: '5.5rem', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-on-surface)', lineHeight: 1 }}>
+            <span style={{ fontSize: 'clamp(3.5rem, 15vw, 5.5rem)', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-on-surface)', lineHeight: 1 }}>
                 {formatTime(timeLeft)}
             </span>
             <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.875rem' }}>
@@ -107,8 +108,8 @@ export default function Timer() {
 
       {/* Controls Container using Glassmorphism pill embedded */}
       <div className="glass" style={{ 
-          display: 'flex', alignItems: 'center', gap: '1.5rem', 
-          padding: '1rem 2rem', borderRadius: 'var(--radius-full)' 
+          display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 3vw, 1.5rem)', 
+          padding: '1rem clamp(1rem, 4vw, 2rem)', borderRadius: 'var(--radius-full)' 
       }}>
         <button 
           onClick={() => {
@@ -125,7 +126,7 @@ export default function Timer() {
         <button 
           onClick={toggleTimer}
           style={{ 
-            width: '200px', height: '60px', borderRadius: 'var(--radius-full)', 
+            width: 'clamp(140px, 45vw, 200px)', height: '60px', borderRadius: 'var(--radius-full)', 
             backgroundColor: getPhaseColor(), color: 'white', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
             boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
