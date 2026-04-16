@@ -84,7 +84,9 @@ export default function Timer() {
 
         <div style={{
            position: 'absolute', inset: '0px', borderRadius: '50%',
-           border: `8px solid ${getPhaseColor()}`,
+           borderStyle: 'solid',
+           borderWidth: '8px',
+           borderTopColor: getPhaseColor(),
            borderRightColor: 'transparent',
            borderBottomColor: 'transparent',
            borderLeftColor: calculateProgress() > 50 ? getPhaseColor() : 'transparent',

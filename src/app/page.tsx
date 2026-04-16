@@ -1,7 +1,12 @@
+"use client";
 import React from 'react';
 import Timer from '@/components/Timer';
+import { useTimerStore } from '@/store/timerStore';
 
 export default function Home() {
+  const { currentSession, sessionsToLongBreak } = useTimerStore();
+  const progressPercent = Math.min(100, Math.round(((currentSession - 1) / sessionsToLongBreak) * 100));
+
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
       
@@ -53,11 +58,11 @@ export default function Home() {
             <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
                <h3 style={{ fontSize: '1rem', marginBottom: '1rem', fontWeight: 700 }}>Today's Progress</h3>
                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-                 <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>Session 1 of 4</span>
-                 <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>25%</span>
+                 <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>Session {currentSession > sessionsToLongBreak ? sessionsToLongBreak : currentSession} of {sessionsToLongBreak}</span>
+                 <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>{progressPercent}%</span>
                </div>
                <div style={{ background: 'var(--color-surface-container-low)', height: '12px', borderRadius: '12px', marginTop: '1rem', overflow:'hidden' }}>
-                 <div style={{ background: 'var(--color-secondary)', width: '25%', height: '100%', borderRadius: '12px' }}></div>
+                 <div style={{ background: 'var(--color-secondary)', width: `${progressPercent}%`, height: '100%', borderRadius: '12px', transition: 'width 0.5s ease' }}></div>
                </div>
             </div>
         </div>
