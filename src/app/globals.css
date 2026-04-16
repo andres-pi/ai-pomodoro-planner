@@ -88,3 +88,13 @@ button {
   font-family: var(--font-body);
   font-weight: 600;
 }
+
+/* Remover las flechas de spinner en input type number */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}

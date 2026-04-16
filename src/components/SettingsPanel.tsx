@@ -1,6 +1,33 @@
 "use client";
 import React, { useState } from 'react';
 import { useTimerStore } from '@/store/timerStore';
+const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
+    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{label}</label>
+    <input 
+      type="number"
+      value={value}
+      min={min}
+      max={max}
+      onChange={(e) => onChange(Number(e.target.value))}
+      style={{
+        backgroundColor: 'var(--color-surface-container-high)',
+        border: 'none',
+        borderBottom: '2px solid transparent',
+        borderRadius: 'var(--radius-md)',
+        padding: '1rem',
+        fontSize: '1rem',
+        fontFamily: 'var(--font-body)',
+        color: 'var(--color-on-surface)',
+        outline: 'none',
+        transition: 'all 0.3s ease',
+        boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
+      }}
+      onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
+      onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
+    />
+  </div>
+);
 
 export default function SettingsPanel() {
   const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings } = useTimerStore();
@@ -23,36 +50,8 @@ export default function SettingsPanel() {
     setTimeout(() => setSaved(false), 2000);
   };
 
-  const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
-      <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{label}</label>
-      <input 
-        type="number"
-        value={value}
-        min={min}
-        max={max}
-        onChange={(e) => onChange(Number(e.target.value))}
-        style={{
-          backgroundColor: 'var(--color-surface-container-high)',
-          border: 'none',
-          borderBottom: '2px solid transparent',
-          borderRadius: 'var(--radius-md)',
-          padding: '1rem',
-          fontSize: '1rem',
-          fontFamily: 'var(--font-body)',
-          color: 'var(--color-on-surface)',
-          outline: 'none',
-          transition: 'all 0.3s ease',
-          boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
-        }}
-        onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
-        onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
-      />
-    </div>
-  );
-
   return (
-    <div 
+    <div
       className="shadow-ambient" 
       style={{ 
         backgroundColor: 'var(--color-surface-container-lowest)',
