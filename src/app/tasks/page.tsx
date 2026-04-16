@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Check, ChevronRight, Plus, Sparkles } from 'lucide-react';
+import AuthOverlay from '@/components/AuthOverlay';
 
 // Interfaces para mantener el código limpio
 interface Task {
@@ -36,9 +37,10 @@ export default function TasksPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
-      
-      {/* HEADER */}
+    <AuthOverlay>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
+        
+        {/* HEADER */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
          <div>
             <div className="text-label-disciplined" style={{ color: 'var(--color-primary)', opacity: 0.8, marginBottom: '0.5rem' }}>
@@ -207,6 +209,7 @@ export default function TasksPage() {
          </div>
 
       </div>
-    </div>
+      </div>
+    </AuthOverlay>
   );
 }
