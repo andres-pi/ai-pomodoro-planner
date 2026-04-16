@@ -149,7 +149,7 @@ export default function SettingsPanel() {
             Account & Sync
           </h3>
           <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-            Inicia sesión para sincronizar tus metas, tareas y acceder a los beneficios del Premium Atelier.
+            Inicia sesión para sincronizar tus metas, tareas y acceder a los beneficios del Premium Clocky.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export default function SettingsPanel() {
                 <User color="var(--color-primary)" />
               </div>
               <div>
-                <h4 style={{ fontWeight: 700, color: 'var(--color-on-surface)' }}>{session?.user?.name || 'Atelier Member'}</h4>
+                <h4 style={{ fontWeight: 700, color: 'var(--color-on-surface)' }}>{session?.user?.name || 'Clocky Member'}</h4>
                 <span style={{ fontSize: '0.8rem', color: '#6A6C76' }}>{session?.user?.email}</span>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function SettingsPanel() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                 <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>EMAIL ADDRESS</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="user@atelier.com" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="user@clocky.com" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'relative' }}>
@@ -208,7 +208,7 @@ export default function SettingsPanel() {
               </div>
 
               <button type="submit" disabled={status === "loading"} style={{ backgroundColor: 'var(--color-on-surface)', color: 'white', padding: '1rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', marginTop: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                {status === "loading" ? "Cargando..." : (authMode === 'login' ? "Entrar al Atelier" : "Crear mi cuenta")}
+                {status === "loading" ? "Cargando..." : (authMode === 'login' ? "Acceder a Clocky" : "Crear mi cuenta")}
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0' }}>

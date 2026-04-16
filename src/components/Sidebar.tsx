@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Home, Calendar as CalendarIcon, CheckSquare, Settings, Timer } from 'lucide-react';
 
 const NavItem = ({ icon: Icon, label, href }: any) => {
@@ -32,6 +33,10 @@ const NavItem = ({ icon: Icon, label, href }: any) => {
 };
 
 export default function Sidebar() {
+  const { data: session } = useSession();
+  const userName = session?.user?.name ? session.user.name.split(' ')[0] : null;
+  const welcomeText = userName ? `¡Me alegra verte de nuevo, ${userName}!` : '¡Bienvenido!';
+
   return (
     <aside style={{
       width: '300px',
@@ -40,7 +45,7 @@ export default function Sidebar() {
       top: 0,
       display: 'flex',
       flexDirection: 'column',
-      padding: '3rem 0 3rem 1.5rem', 
+      padding: '3rem 0 3rem 1.5rem',
       backgroundColor: 'transparent',
     }}>
       {/* Branding */}
@@ -49,10 +54,10 @@ export default function Sidebar() {
           Clocky
         </h2>
         <div style={{ marginTop: '2.5rem' }}>
-            <h3 style={{ fontSize: '1.3rem', color: 'var(--color-primary)', fontWeight: 600 }}>Bienvenida Lety</h3>
-            <p className="text-label-disciplined" style={{ fontSize: '0.65rem', color: '#9a9a9d', marginTop: '0.5rem' }}>
-              STAY DISCIPLINED TODAY.
-            </p>
+          <h3 style={{ fontSize: '1.3rem', color: 'var(--color-primary)', fontWeight: 600 }}>{welcomeText}</h3>
+          <p className="text-label-disciplined" style={{ fontSize: '0.65rem', color: '#9a9a9d', marginTop: '0.5rem' }}>
+            STAY DISCIPLINED TODAY.
+          </p>
         </div>
       </div>
 
@@ -79,14 +84,14 @@ export default function Sidebar() {
           boxShadow: '0 15px 35px rgba(100, 83, 162, 0.25)',
           transition: 'all 0.2s ease',
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 20px 40px rgba(100, 83, 162, 0.35)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 15px 35px rgba(100, 83, 162, 0.25)';
-        }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(100, 83, 162, 0.35)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 15px 35px rgba(100, 83, 162, 0.25)';
+          }}
         >
           <Timer size={20} />
           <span style={{ fontWeight: 700, letterSpacing: '0.02em' }}>START POMODORO</span>

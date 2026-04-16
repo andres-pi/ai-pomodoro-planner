@@ -17,7 +17,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "The Atelier | AI Planner",
+  title: "Clocky | AI Planner",
   description: "A disciplined sweetheart environment to focus.",
 };
 
@@ -32,10 +32,10 @@ export default function RootLayout({
         <Providers>
           <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
             <Sidebar />
-            <main style={{ 
-              flex: 1, 
-              backgroundColor: 'var(--color-surface-container-low)', 
-              borderTopLeftRadius: 'var(--radius-xl)', 
+            <main style={{
+              flex: 1,
+              backgroundColor: 'var(--color-surface-container-low)',
+              borderTopLeftRadius: 'var(--radius-xl)',
               borderBottomLeftRadius: 'var(--radius-xl)',
               margin: '1.5rem 1.5rem 1.5rem 0',
               boxShadow: '-10px 0 40px rgba(49, 50, 56, 0.03)',
