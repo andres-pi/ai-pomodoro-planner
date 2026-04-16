@@ -1,3 +1,6 @@
+import React from 'react';
+import Timer from '@/components/Timer';
+
 export default function Home() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem' }}>
@@ -19,15 +22,14 @@ export default function Home() {
           style={{ 
             backgroundColor: 'var(--color-surface-container-lowest)',
             borderRadius: 'var(--radius-xl)',
-            padding: '2rem',
-            minHeight: '400px'
+            padding: '3rem 2rem',
+            minHeight: '600px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <div className="text-label-disciplined" style={{ color: 'var(--color-primary)' }}>
-            Focus Schedule
-          </div>
-          <h2 style={{ marginTop: '0.5rem', marginBottom: '2rem' }}>Octubre 2024</h2>
-          {/* Aquí irá el grid del calendario */}
+          <Timer />
         </div>
 
         {/* Placeholder para la sección derecha de widgets diarios */}
