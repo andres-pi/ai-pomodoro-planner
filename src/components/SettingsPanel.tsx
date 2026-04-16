@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import { useTimerStore } from '@/store/timerStore';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { User, LogOut, Eye, EyeOff } from "lucide-react";
+
 const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
     <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{label}</label>
-    <input 
+    <input
       type="number"
       value={value}
       min={min}
@@ -32,12 +35,40 @@ const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
 export default function SettingsPanel() {
   const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings } = useTimerStore();
 
-  // Helper local states just for the input fields
+  // Helper local states just for the timer inputs
   const [work, setWork] = useState(workDuration / 60);
   const [short, setShort] = useState(shortBreakDuration / 60);
   const [long, setLong] = useState(longBreakDuration / 60);
   const [sessions, setSessions] = useState(sessionsToLongBreak);
   const [saved, setSaved] = useState(false);
+
+  // Auth States
+  const { data: session, status } = useSession();
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (authMode === 'login') {
+      await signIn('credentials', { email, password, redirect: false });
+    } else {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, firstName, lastName })
+      });
+      if (res.ok) {
+        await signIn('credentials', { email, password, redirect: false });
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || "Error al registrarse");
+      }
+    }
+  };
 
   const handleSave = () => {
     updateSettings({
@@ -51,37 +82,40 @@ export default function SettingsPanel() {
   };
 
   return (
-    <div
-      className="shadow-ambient" 
-      style={{ 
-        backgroundColor: 'var(--color-surface-container-lowest)',
-        borderRadius: 'var(--radius-xl)',
-        padding: '2.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2rem'
-      }}
-    >
-      <div>
-        <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
-          Manual Configuration
-        </h3>
-        <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-          Configura tus propios límites para los períodos de concentración. Debes "Aplicar Cambios" para sobreescribir el temporizador actual.
-        </p>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <InputField label="FOCUS TIME (MIN)" value={work} onChange={setWork} max={120} />
-        <InputField label="SHORT BREAK (MIN)" value={short} onChange={setShort} max={30} />
-      </div>
+      {/* ORIGINAL SETTINGS */}
+      <div
+        className="shadow-ambient"
+        style={{
+          backgroundColor: 'var(--color-surface-container-lowest)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '2.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem'
+        }}
+      >
+        <div>
+          <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
+            Manual Configuration
+          </h3>
+          <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+            Configura tus propios límites para los períodos de concentración. Debes "Aplicar Cambios" para sobreescribir el temporizador actual.
+          </p>
+        </div>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <InputField label="LONG BREAK (MIN)" value={long} onChange={setLong} max={60} />
-        <InputField label="SESSIONS PER ROUND" value={sessions} onChange={setSessions} max={10} />
-      </div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <InputField label="FOCUS TIME (MIN)" value={work} onChange={setWork} max={120} />
+          <InputField label="SHORT BREAK (MIN)" value={short} onChange={setShort} max={30} />
+        </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <InputField label="LONG BREAK (MIN)" value={long} onChange={setLong} max={60} />
+          <InputField label="SESSIONS PER ROUND" value={sessions} onChange={setSessions} max={10} />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
           <button
             onClick={handleSave}
             style={{
@@ -102,8 +136,101 @@ export default function SettingsPanel() {
           >
             {saved ? "✓ APPLIED" : "APPLY CHANGES"}
           </button>
+        </div>
+
       </div>
 
+      {/* ACCOUNT & SYNC SECTION (MOVED TO BOTTOM) */}
+      <div className="shadow-ambient" style={{
+        backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-xl)', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem'
+      }}>
+        <div>
+          <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
+            Account & Sync
+          </h3>
+          <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+            Inicia sesión para sincronizar tus metas, tareas y acceder a los beneficios del Premium Atelier.
+          </p>
+        </div>
+
+        {status === "authenticated" ? (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'var(--color-surface-container-low)', padding: '1.5rem', borderRadius: 'var(--radius-md)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--color-primary-container)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <User color="var(--color-primary)" />
+              </div>
+              <div>
+                <h4 style={{ fontWeight: 700, color: 'var(--color-on-surface)' }}>{session?.user?.name || 'Atelier Member'}</h4>
+                <span style={{ fontSize: '0.8rem', color: '#6A6C76' }}>{session?.user?.email}</span>
+              </div>
+            </div>
+            <button onClick={() => signOut()} style={{ color: 'var(--color-tertiary)', backgroundColor: 'transparent', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <LogOut size={16} /> Cerrar Sesión
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '400px' }}>
+            <div style={{ display: 'flex', borderBottom: '2px solid var(--color-surface-container-high)', gap: '2rem', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
+              <button onClick={() => setAuthMode('login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: authMode === 'login' ? 'var(--color-primary)' : '#6A6C76', transition: 'color 0.2s ease' }}>
+                Iniciar sesión
+              </button>
+              <button onClick={() => setAuthMode('register')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: authMode === 'register' ? 'var(--color-primary)' : '#6A6C76', transition: 'color 0.2s ease' }}>
+                Registrarse
+              </button>
+            </div>
+
+            <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+              {authMode === 'register' && (
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>NOMBRE</label>
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="Jane" style={{ backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
+                  </div>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>APELLIDO</label>
+                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required placeholder="Doe" style={{ backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
+                  </div>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>EMAIL ADDRESS</label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="user@atelier.com" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'relative' }}>
+                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>PASSWORD</label>
+                <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', paddingRight: '3rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '1rem', top: '2.25rem', background: 'none', border: 'none', cursor: 'pointer', color: '#6A6C76' }}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+
+              <button type="submit" disabled={status === "loading"} style={{ backgroundColor: 'var(--color-on-surface)', color: 'white', padding: '1rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', marginTop: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                {status === "loading" ? "Cargando..." : (authMode === 'login' ? "Entrar al Atelier" : "Crear mi cuenta")}
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0' }}>
+                <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-surface-container-high)' }}></div>
+                <span style={{ margin: '0 1rem', color: '#6A6C76', fontSize: '0.8rem', fontWeight: 600 }}>o</span>
+                <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-surface-container-high)' }}></div>
+              </div>
+
+              <button type="button" onClick={() => signIn('google')} style={{ backgroundColor: 'white', color: 'var(--color-on-surface)', padding: '1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', border: '1px solid var(--color-surface-container-high)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                  <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                  <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                  <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                </svg>
+                Continuar con Google
+              </button>
+
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

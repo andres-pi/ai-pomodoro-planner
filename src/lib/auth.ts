@@ -22,21 +22,9 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email }
         });
         
-        // Verificación simulada simple contra local DB (En el futuro usar bcrypt, ideal para testing)
+        // Verificación simulada simple contra local DB
         if (user && user.passwordHash === credentials.password) {
           return { id: user.id, email: user.email, name: user.name };
-        }
-        
-        // Si el usuario no existe localmente, lo auto-creamos (mock local register)
-        if (!user) {
-          const newUser = await prisma.user.create({
-            data: {
-               email: credentials.email,
-               passwordHash: credentials.password,
-               name: credentials.email.split('@')[0]
-            }
-          });
-          return { id: newUser.id, email: newUser.email, name: newUser.name };
         }
         
         return null;
