@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  passwordHash   String?
+  currentStreak  Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastActiveAt   DateTime? @default(now())
+
+  // NextAuth relations
+  accounts       Account[]
+  sessions       Session[]
+  
+  // App relations
+  settings       UserSettings?
+  tasks          Task[]
+  events         Event[]
+  history        SessionHistory[]
+}
+
+model UserSettings {
+  id                  String @id @default(cuid())
+  userId              String @unique
+  user                User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workDuration        Int    @default(1500) // 25 min in seconds
+  shortBreakDuration  Int    @default(300)  // 5 min
+  longBreakDuration   Int    @default(900)  // 15 min
+  sessionsToLongBreak Int    @default(4)
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  category  String   @default("focus") // 'focus', 'wellness', 'admin'
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  subTitle  String?
+  date      DateTime
+  type      String   @default("primary") // 'primary', 'secondary', 'tertiary'
+}
+
+model SessionHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  duration    Int      // seconds completed
+  completedAt DateTime @default(now())
+}
+
+// NECESSARY FOR NEXTAUTH OVER POSTGRES
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
