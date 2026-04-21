@@ -64,7 +64,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem', width: '100%', flexDirection: 'inherit' }}>
+      <nav className="mobile-nav-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem', width: '100%' }}>
         <NavItem icon={Home} label="HOME" href="/" />
         <NavItem icon={CalendarIcon} label="CALENDAR" href="/calendar" />
         <NavItem icon={CheckSquare} label="TASKS" href="/tasks" />

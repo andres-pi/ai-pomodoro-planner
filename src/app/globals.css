@@ -180,6 +180,14 @@ input[type=number] {
     box-shadow: 0 -10px 30px rgba(49, 50, 56, 0.05) !important;
   }
 
+  .mobile-nav-wrapper {
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
   .nav-item-mobile {
     flex-direction: column !important;
     padding: 0.5rem !important;
