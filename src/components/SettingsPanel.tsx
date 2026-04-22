@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { useTimerStore } from '@/store/timerStore';
 import { signIn, signOut, useSession } from "next-auth/react";
-import { User, LogOut, Eye, EyeOff } from "lucide-react";
+import { User, LogOut, Eye, EyeOff, Moon, Sun } from "lucide-react";
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLangStore } from '@/store/langStore';
+import { useThemeStore } from '@/store/themeStore';
 
 const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
@@ -37,6 +38,7 @@ const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
 export default function SettingsPanel() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLangStore();
+  const { theme, setTheme } = useThemeStore();
   const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings } = useTimerStore();
 
   // Helper local states just for the timer inputs
@@ -111,6 +113,33 @@ export default function SettingsPanel() {
              onClick={() => setLanguage('en')}
              style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'en' ? 'white' : 'transparent', color: language === 'en' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'en' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
              English
+          </button>
+        </div>
+      </div>
+
+      {/* THEME TOGGLE */}
+      <div className="shadow-ambient mobile-gap-column" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-xl)', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
+        <div>
+          <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
+            {t("SETTINGS_THEME_TITLE")}
+          </h3>
+          <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+            {t("SETTINGS_THEME_DESC")}
+          </p>
+        </div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', borderRadius: '20px', padding: '0.25rem' }}>
+          <button 
+             type="button"
+             onClick={() => setTheme('light')}
+             style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: theme === 'light' ? 'var(--color-surface-container-lowest)' : 'transparent', color: theme === 'light' ? 'var(--color-primary)' : '#6A6C76', boxShadow: theme === 'light' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             <Sun size={16} /> {t("THEME_LIGHT")}
+          </button>
+          <button 
+             type="button"
+             onClick={() => setTheme('dark')}
+             style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: theme === 'dark' ? 'var(--color-surface-container-lowest)' : 'transparent', color: theme === 'dark' ? 'var(--color-primary)' : '#6A6C76', boxShadow: theme === 'dark' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             <Moon size={16} /> {t("THEME_DARK")}
           </button>
         </div>
       </div>

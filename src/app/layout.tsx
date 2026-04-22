@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Manrope } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import { Providers } from "@/components/Providers";
+import ThemeProvider from "@/components/ThemeProvider";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -29,14 +30,16 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${manrope.variable} ${plusJakarta.variable}`}>
-        <Providers>
-          <div className="app-layout">
-            <Sidebar />
-            <main className="main-content">
-              {children}
-            </main>
-          </div>
-        </Providers>
+        <ThemeProvider>
+          <Providers>
+            <div className="app-layout">
+              <Sidebar />
+              <main className="main-content">
+                {children}
+              </main>
+            </div>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

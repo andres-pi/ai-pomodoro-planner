@@ -36,6 +36,28 @@
   --font-body: 'Manrope', sans-serif;
 }
 
+/* Soft Dark Mode Pallete */
+[data-theme="dark"] {
+  --color-primary: #7b6ab7;
+  --color-primary-dim: #9283cd;
+  --color-primary-container: #322659;
+  
+  --color-secondary: #a3c285;
+  --color-secondary-container: #3d5032;
+  --color-on-secondary-container: #dceec9;
+
+  --color-tertiary: #b0ccaa;
+  --color-tertiary-fixed-dim: #3b5035;
+
+  --color-background: #18181f; 
+  --color-surface-container-low: #22222a;
+  --color-surface-container-high: #31313e;
+  --color-surface-container-lowest: #282832;
+  
+  --color-on-surface: #f0f0f5; 
+  --color-outline-variant: rgba(255, 255, 255, 0.08);
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
