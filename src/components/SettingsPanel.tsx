@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useTimerStore } from '@/store/timerStore';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { User, LogOut, Eye, EyeOff } from "lucide-react";
+import { useTranslation } from '@/hooks/useTranslation';
+import { useLangStore } from '@/store/langStore';
 
 const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
@@ -33,6 +35,8 @@ const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
 );
 
 export default function SettingsPanel() {
+  const { t } = useTranslation();
+  const { language, setLanguage } = useLangStore();
   const { workDuration, shortBreakDuration, longBreakDuration, sessionsToLongBreak, updateSettings } = useTimerStore();
 
   // Helper local states just for the timer inputs
@@ -84,6 +88,33 @@ export default function SettingsPanel() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
+      {/* LANGUAGE TOGGLE */}
+      <div className="shadow-ambient mobile-gap-column" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-xl)', padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
+        <div>
+          <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
+            {t("SETTINGS_LANG_TITLE")}
+          </h3>
+          <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+            {t("SETTINGS_LANG_DESC")}
+          </p>
+        </div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', borderRadius: '20px', padding: '0.25rem' }}>
+          <button 
+             type="button"
+             onClick={() => setLanguage('es')}
+             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'es' ? 'white' : 'transparent', color: language === 'es' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'es' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             Español
+          </button>
+          <button 
+             type="button"
+             onClick={() => setLanguage('en')}
+             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'en' ? 'white' : 'transparent', color: language === 'en' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'en' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             English
+          </button>
+        </div>
+      </div>
+
       {/* ORIGINAL SETTINGS */}
       <div
         className="shadow-ambient"
@@ -98,21 +129,21 @@ export default function SettingsPanel() {
       >
         <div>
           <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
-            Manual Configuration
+            {t("SETTINGS_MANUAL_TITLE")}
           </h3>
           <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-            Configura tus propios límites para los períodos de concentración. Debes "Aplicar Cambios" para sobreescribir el temporizador actual.
+            {t("SETTINGS_MANUAL_DESC")}
           </p>
         </div>
 
         <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
-          <InputField label="FOCUS TIME (MIN)" value={work} onChange={setWork} max={120} />
-          <InputField label="SHORT BREAK (MIN)" value={short} onChange={setShort} max={30} />
+          <InputField label={t("SETTINGS_FOCUS_LBL")} value={work} onChange={setWork} max={120} />
+          <InputField label={t("SETTINGS_SHORT_LBL")} value={short} onChange={setShort} max={30} />
         </div>
 
         <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
-          <InputField label="LONG BREAK (MIN)" value={long} onChange={setLong} max={60} />
-          <InputField label="SESSIONS PER ROUND" value={sessions} onChange={setSessions} max={10} />
+          <InputField label={t("SETTINGS_LONG_LBL")} value={long} onChange={setLong} max={60} />
+          <InputField label={t("SETTINGS_SESSIONS_LBL")} value={sessions} onChange={setSessions} max={10} />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
@@ -134,7 +165,7 @@ export default function SettingsPanel() {
             onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.97)'}
             onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
-            {saved ? "✓ APPLIED" : "APPLY CHANGES"}
+            {saved ? t("SETTINGS_APPLIED_BTN") : t("SETTINGS_APPLY_BTN")}
           </button>
         </div>
 
@@ -146,10 +177,10 @@ export default function SettingsPanel() {
       }}>
         <div>
           <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', letterSpacing: '-0.02em', fontWeight: 700 }}>
-            Account & Sync
+            {t("SETTINGS_ACCOUNT_TITLE")}
           </h3>
           <p style={{ color: '#6A6C76', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-            Inicia sesión para sincronizar tus metas, tareas y acceder a los beneficios del Premium Clocky.
+            {t("SETTINGS_ACCOUNT_DESC")}
           </p>
         </div>
 
@@ -165,17 +196,17 @@ export default function SettingsPanel() {
               </div>
             </div>
             <button onClick={() => signOut()} style={{ color: 'var(--color-tertiary)', backgroundColor: 'transparent', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-              <LogOut size={16} /> Cerrar Sesión
+              <LogOut size={16} /> {t("SETTINGS_LOGOUT")}
             </button>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '400px' }}>
             <div style={{ display: 'flex', borderBottom: '2px solid var(--color-surface-container-high)', gap: '2rem', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
               <button onClick={() => setAuthMode('login')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: authMode === 'login' ? 'var(--color-primary)' : '#6A6C76', transition: 'color 0.2s ease' }}>
-                Iniciar sesión
+                {t("SETTINGS_LOGIN_BTN")}
               </button>
               <button onClick={() => setAuthMode('register')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: authMode === 'register' ? 'var(--color-primary)' : '#6A6C76', transition: 'color 0.2s ease' }}>
-                Registrarse
+                {t("SETTINGS_REGISTER_BTN")}
               </button>
             </div>
 
@@ -184,23 +215,23 @@ export default function SettingsPanel() {
               {authMode === 'register' && (
                 <div className="mobile-gap-column" style={{ display: 'flex', gap: '1rem' }}>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>NOMBRE</label>
+                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{t("SETTINGS_FIRST_NAME_LBL")}</label>
                     <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="Jane" style={{ backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>APELLIDO</label>
+                    <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{t("SETTINGS_LAST_NAME_LBL")}</label>
                     <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required placeholder="Doe" style={{ backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
                   </div>
                 </div>
               )}
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>EMAIL ADDRESS</label>
+                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{t("SETTINGS_EMAIL_LBL")}</label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="user@clocky.com" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'relative' }}>
-                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>PASSWORD</label>
+                <label className="text-label-disciplined" style={{ color: '#6A6C76', fontSize: '0.65rem' }}>{t("SETTINGS_PASS_LBL")}</label>
                 <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" style={{ width: '100%', backgroundColor: 'var(--color-surface-container-high)', border: 'none', borderBottom: '2px solid transparent', borderRadius: 'var(--radius-md)', padding: '1rem', paddingRight: '3rem', fontSize: '1rem', fontFamily: 'var(--font-body)', outline: 'none', transition: 'all 0.3s' }} onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'} onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '1rem', top: '2.25rem', background: 'none', border: 'none', cursor: 'pointer', color: '#6A6C76' }}>
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -208,7 +239,7 @@ export default function SettingsPanel() {
               </div>
 
               <button type="submit" disabled={status === "loading"} style={{ backgroundColor: 'var(--color-on-surface)', color: 'white', padding: '1rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', marginTop: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                {status === "loading" ? "Cargando..." : (authMode === 'login' ? "Acceder a Clocky" : "Crear mi cuenta")}
+                {status === "loading" ? t("SETTINGS_LOADING") : (authMode === 'login' ? t("SETTINGS_SUBMIT_LOGIN") : t("SETTINGS_SUBMIT_REGISTER"))}
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0' }}>
@@ -224,7 +255,7 @@ export default function SettingsPanel() {
                   <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
                   <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
                 </svg>
-                Continuar con Google
+                {t("SETTINGS_GOOGLE_BTN")}
               </button>
 
             </form>

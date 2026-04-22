@@ -2,9 +2,11 @@
 import React, { useEffect } from 'react';
 import { useTimerStore } from '@/store/timerStore';
 import { Play, Pause, SkipForward, RotateCcw } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Timer() {
   const { timeLeft, isRunning, phase, currentSession, toggleTimer, skipPhase, tick, updateSettings, workDuration, shortBreakDuration, longBreakDuration } = useTimerStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if ("Notification" in window && Notification.permission === "default") {
@@ -30,104 +32,104 @@ export default function Timer() {
 
   const getPhaseColor = () => {
     if (phase === 'WORK') return 'var(--color-primary)';
-    if (phase === 'SHORT_BREAK') return 'var(--color-tertiary)'; 
-    return 'var(--color-secondary)'; 
+    if (phase === 'SHORT_BREAK') return 'var(--color-tertiary)';
+    return 'var(--color-secondary)';
   };
 
   const calculateProgress = () => {
-      let baseTime = workDuration;
-      if (phase === 'SHORT_BREAK') baseTime = shortBreakDuration;
-      if (phase === 'LONG_BREAK') baseTime = longBreakDuration;
-      
-      const elap = baseTime - timeLeft;
-      return (elap / baseTime) * 100;
+    let baseTime = workDuration;
+    if (phase === 'SHORT_BREAK') baseTime = shortBreakDuration;
+    if (phase === 'LONG_BREAK') baseTime = longBreakDuration;
+
+    const elap = baseTime - timeLeft;
+    return (elap / baseTime) * 100;
   };
 
   return (
-    <div className="shadow-ambient mobile-p-1" style={{ 
-        backgroundColor: 'var(--color-surface-container-lowest)', 
-        borderRadius: 'var(--radius-xl)', 
-        padding: '3rem 2rem',
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        position: 'relative' 
+    <div className="shadow-ambient mobile-p-1" style={{
+      backgroundColor: 'var(--color-surface-container-lowest)',
+      borderRadius: 'var(--radius-xl)',
+      padding: '3rem 2rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      position: 'relative'
     }}>
-      
+
       {/* Decorative prompt on top */}
       <div style={{
-          backgroundColor: 'var(--color-background)',
-          padding: '0.75rem 1.5rem',
-          borderRadius: 'var(--radius-full)',
-          marginBottom: '2rem',
-          color: 'var(--color-primary)',
-          fontSize: 'clamp(0.75rem, 3vw, 0.875rem)',
-          fontWeight: 600,
-          textAlign: 'center'
+        backgroundColor: 'var(--color-background)',
+        padding: '0.75rem 1.5rem',
+        borderRadius: 'var(--radius-full)',
+        marginBottom: '2rem',
+        color: 'var(--color-primary)',
+        fontSize: 'clamp(0.75rem, 3vw, 0.875rem)',
+        fontWeight: 600,
+        textAlign: 'center'
       }}>
-          No rompas la racha ahora, ¡tú puedes! ✨
+        {t("TIMER_DECORATIVE_PROMPT")}
       </div>
-      
+
       {/* Visual Clock Outline */}
-      <div style={{ 
+      <div style={{
         position: 'relative',
-        width: '100%', maxWidth: '320px', aspectRatio: '1 / 1', 
-        borderRadius: 'var(--radius-full)', 
+        width: '100%', maxWidth: '320px', aspectRatio: '1 / 1',
+        borderRadius: 'var(--radius-full)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         margin: '1.5rem 0 3rem 0'
       }}>
-        
+
         <div style={{
-           position: 'absolute', inset: '0px', borderRadius: '50%',
-           border: `8px solid var(--color-surface-container-low)`,
-           transition: 'all 0.5s ease'
+          position: 'absolute', inset: '0px', borderRadius: '50%',
+          border: `8px solid var(--color-surface-container-low)`,
+          transition: 'all 0.5s ease'
         }}></div>
 
         <div style={{
-           position: 'absolute', inset: '0px', borderRadius: '50%',
-           borderStyle: 'solid',
-           borderWidth: '8px',
-           borderTopColor: getPhaseColor(),
-           borderRightColor: 'transparent',
-           borderBottomColor: 'transparent',
-           borderLeftColor: calculateProgress() > 50 ? getPhaseColor() : 'transparent',
-           transform: `rotate(${(calculateProgress() / 100) * 360}deg)`,
-           transition: 'all 1s linear'
+          position: 'absolute', inset: '0px', borderRadius: '50%',
+          borderStyle: 'solid',
+          borderWidth: '8px',
+          borderTopColor: getPhaseColor(),
+          borderRightColor: 'transparent',
+          borderBottomColor: 'transparent',
+          borderLeftColor: calculateProgress() > 50 ? getPhaseColor() : 'transparent',
+          transform: `rotate(${(calculateProgress() / 100) * 360}deg)`,
+          transition: 'all 1s linear'
         }}></div>
 
         <div style={{ zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <span className="text-label-disciplined" style={{ marginBottom: '0.5rem', color: '#6A6C76', fontSize: '0.65rem' }}>TIME REMAINING</span>
-            <span style={{ fontSize: 'clamp(3.5rem, 15vw, 5.5rem)', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-on-surface)', lineHeight: 1 }}>
-                {formatTime(timeLeft)}
-            </span>
-            <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.875rem' }}>
-                🎵 Lo-fi Focus Beats
-            </div>
+          <span className="text-label-disciplined" style={{ marginBottom: '0.5rem', color: '#6A6C76', fontSize: '0.65rem' }}>{t("TIMER_TIME_REMAINING")}</span>
+          <span style={{ fontSize: 'clamp(3.5rem, 15vw, 5.5rem)', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-on-surface)', lineHeight: 1 }}>
+            {formatTime(timeLeft)}
+          </span>
+          <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.875rem' }}>
+            🎵 {t("TIMER_MUSIC_LOFI")}
+          </div>
         </div>
       </div>
 
       {/* Controls Container using Glassmorphism pill embedded */}
-      <div className="glass" style={{ 
-          display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 3vw, 1.5rem)', 
-          padding: '1rem clamp(1rem, 4vw, 2rem)', borderRadius: 'var(--radius-full)' 
+      <div className="glass" style={{
+        display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 3vw, 1.5rem)',
+        padding: '1rem clamp(1rem, 4vw, 2rem)', borderRadius: 'var(--radius-full)'
       }}>
-        <button 
+        <button
           onClick={() => {
-              let baseTime = workDuration;
-              if (phase === 'SHORT_BREAK') baseTime = shortBreakDuration;
-              if (phase === 'LONG_BREAK') baseTime = longBreakDuration;
-              updateSettings({ timeLeft: baseTime });
+            let baseTime = workDuration;
+            if (phase === 'SHORT_BREAK') baseTime = shortBreakDuration;
+            if (phase === 'LONG_BREAK') baseTime = longBreakDuration;
+            updateSettings({ timeLeft: baseTime });
           }}
           style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76' }}
         >
           <RotateCcw size={20} />
         </button>
-        
-        <button 
+
+        <button
           onClick={toggleTimer}
-          style={{ 
-            width: 'clamp(140px, 45vw, 200px)', height: '60px', borderRadius: 'var(--radius-full)', 
-            backgroundColor: getPhaseColor(), color: 'white', 
+          style={{
+            width: 'clamp(140px, 45vw, 200px)', height: '60px', borderRadius: 'var(--radius-full)',
+            backgroundColor: getPhaseColor(), color: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
             boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
             transition: 'background-color 0.5s ease, transform 0.2s ease'
@@ -139,7 +141,7 @@ export default function Timer() {
           <span style={{ fontWeight: 700, letterSpacing: '0.05em', fontSize: '1rem' }}>{isRunning ? "PAUSE SESSION" : "START SESSION"}</span>
         </button>
 
-        <button 
+        <button
           onClick={skipPhase}
           style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76' }}
         >

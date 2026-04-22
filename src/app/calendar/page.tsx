@@ -2,6 +2,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon } from 'lucide-react';
 import AuthOverlay from '@/components/AuthOverlay';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const CALENDAR_DAYS = [
    { day: 29, currentMonth: false }, { day: 30, currentMonth: false }, { day: 1, currentMonth: true }, { day: 2, currentMonth: true }, { day: 3, currentMonth: true }, { day: 4, currentMonth: true }, { day: 5, currentMonth: true },
@@ -19,6 +20,8 @@ const EVENTS: Record<string, any[]> = {
 };
 
 export default function CalendarPage() {
+   const { t } = useTranslation();
+
    return (
       <AuthOverlay>
          <div className="mobile-p-1" style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 2.5rem' }}>
@@ -26,8 +29,11 @@ export default function CalendarPage() {
             {/* HEADER */}
             <header className="mobile-gap-column" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem', gap: '1rem' }}>
                <div>
-                  <h1 style={{ fontSize: '2.75rem', color: 'var(--color-on-surface)', letterSpacing: '-0.04em', lineHeight: 1.1 }}>
-                     Planifica tu éxito ✍️
+                  <div className="text-label-disciplined" style={{ color: 'var(--color-primary)', opacity: 0.8, marginBottom: '0.5rem' }}>
+                     {t('GLOBAL_HEADER_ROUTE')} / {t('CALENDAR_HEADER_ROUTE')}
+                  </div>
+                  <h1 style={{ fontSize: '2.5rem', color: 'var(--color-on-surface)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+                     {t("CALENDAR_HEADER_TITLE")}
                   </h1>
                   <p style={{ color: '#6A6C76', fontSize: '1.125rem', marginTop: '0.75rem', maxWidth: '500px' }}>
                      Organiza tus sesiones de estudio y alcanza tus metas con elegancia y disciplina.
@@ -38,10 +44,10 @@ export default function CalendarPage() {
                   border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
                }}>
                   <button style={{ padding: '0.75rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-primary)', backgroundColor: 'transparent' }}>
-                     Monthly
+                     {t("CALENDAR_TOGGLE_MONTHLY")}
                   </button>
                   <button style={{ padding: '0.75rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.9rem', color: '#8b8b96', transition: 'all 0.2s ease', backgroundColor: 'transparent' }}>
-                     Weekly
+                     {t("CALENDAR_TOGGLE_WEEKLY")}
                   </button>
                </div>
             </header>

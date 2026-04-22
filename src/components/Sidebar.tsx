@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Home, Calendar as CalendarIcon, CheckSquare, Settings, Timer } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const NavItem = ({ icon: Icon, label, href }: any) => {
   const pathname = usePathname();
@@ -11,22 +12,22 @@ const NavItem = ({ icon: Icon, label, href }: any) => {
 
   return (
     <Link href={href} style={{ textDecoration: 'none' }}>
-      <div 
+      <div
         className="nav-item-mobile"
         style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1.25rem',
-        padding: '1.125rem 2rem',
-        width: '100%',
-        borderRadius: 'var(--radius-full)',
-        backgroundColor: active ? 'var(--color-surface-container-lowest)' : 'transparent',
-        color: active ? 'var(--color-primary)' : '#8b8b96', // soft muted tone
-        fontWeight: '600',
-        transition: 'all 0.3s ease',
-        boxShadow: active ? '0 10px 30px rgba(49, 50, 56, 0.04)' : 'none',
-        marginBottom: '0.25rem',
-      }}>
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.25rem',
+          padding: '1.125rem 2rem',
+          width: '100%',
+          borderRadius: 'var(--radius-full)',
+          backgroundColor: active ? 'var(--color-surface-container-lowest)' : 'transparent',
+          color: active ? 'var(--color-primary)' : '#8b8b96', // soft muted tone
+          fontWeight: '600',
+          transition: 'all 0.3s ease',
+          boxShadow: active ? '0 10px 30px rgba(49, 50, 56, 0.04)' : 'none',
+          marginBottom: '0.25rem',
+        }}>
         <Icon size={20} strokeWidth={active ? 2.5 : 2} />
         <span className="text-label-disciplined">{label}</span>
       </div>
@@ -35,9 +36,10 @@ const NavItem = ({ icon: Icon, label, href }: any) => {
 };
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const userName = session?.user?.name ? session.user.name.split(' ')[0] : null;
-  const welcomeText = userName ? `¡Me alegra verte de nuevo, ${userName}!` : '¡Bienvenido!';
+  const welcomeText = userName ? t("SIDEBAR_WELCOME_USER", { name: userName }) : t("SIDEBAR_WELCOME_GUEST");
 
   return (
     <aside className="sidebar-container" style={{
@@ -58,17 +60,17 @@ export default function Sidebar() {
         <div style={{ marginTop: '2.5rem' }}>
           <h3 style={{ fontSize: '1.3rem', color: 'var(--color-primary)', fontWeight: 600 }}>{welcomeText}</h3>
           <p className="text-label-disciplined" style={{ fontSize: '0.65rem', color: '#9a9a9d', marginTop: '0.5rem' }}>
-            STAY DISCIPLINED TODAY.
+            {t("SIDEBAR_SUBTITLE")}
           </p>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="mobile-nav-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: '1.5rem', width: '100%' }}>
-        <NavItem icon={Home} label="HOME" href="/" />
-        <NavItem icon={CalendarIcon} label="CALENDAR" href="/calendar" />
-        <NavItem icon={CheckSquare} label="TASKS" href="/tasks" />
-        <NavItem icon={Settings} label="SETTINGS" href="/settings" />
+        <NavItem icon={Home} label={t("SIDEBAR_HOME")} href="/" />
+        <NavItem icon={CalendarIcon} label={t("SIDEBAR_CALENDAR")} href="/calendar" />
+        <NavItem icon={CheckSquare} label={t("SIDEBAR_TASKS")} href="/tasks" />
+        <NavItem icon={Settings} label={t("SIDEBAR_SETTINGS")} href="/settings" />
       </nav>
 
       {/* Focus CTA */}
@@ -96,7 +98,7 @@ export default function Sidebar() {
           }}
         >
           <Timer size={20} />
-          <span style={{ fontWeight: 700, letterSpacing: '0.02em' }}>START POMODORO</span>
+          <span style={{ fontWeight: 700, letterSpacing: '0.02em' }}>{t("SIDEBAR_CTA")}</span>
         </button>
       </div>
     </aside>
