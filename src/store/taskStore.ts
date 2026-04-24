@@ -56,9 +56,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, category, scheduledDate }),
       });
-      if (!res.ok) throw new Error('Failed to create task');
+      const resJson = await res.json();
+      if (!res.ok) throw new Error(resJson.error || 'Failed to create task');
       
-      const createdTask = await res.json();
+      const createdTask = resJson;
       // Reemplazamos el temporal por el real
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === tempId ? createdTask : t)),
@@ -82,7 +83,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ completed }),
       });
-      if (!res.ok) throw new Error('Failed to update task');
+      if (!res.ok) {
+         const resJson = await res.json();
+         throw new Error(resJson.error || 'Failed to update task');
+      }
     } catch (error) {
       // Revertir
       set((state) => ({
@@ -101,7 +105,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     try {
       const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete task');
+      if (!res.ok) {
+         const resJson = await res.json();
+         throw new Error(resJson.error || 'Failed to delete task');
+      }
     } catch (error) {
       // Revertir
       set({ tasks: previousTasks });
