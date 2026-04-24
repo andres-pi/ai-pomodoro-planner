@@ -1,32 +1,25 @@
 "use client";
-import React, { useState } from 'react';
-import { Check, ChevronRight, Plus, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Check, ChevronRight, Plus, Sparkles, Calendar as CalendarIcon, Tag, Trash2 } from 'lucide-react';
 import AuthOverlay from '@/components/AuthOverlay';
 import { useTranslation } from '@/hooks/useTranslation';
-
-// Interfaces para mantener el código limpio
-interface Task {
-   id: string;
-   title: string;
-   category: 'focus' | 'wellness' | 'admin';
-   completed: boolean;
-}
-
-const INITIAL_TASKS: Task[] = [
-   { id: '1', title: 'Repaso de Estética Floral', category: 'focus', completed: false },
-   { id: '2', title: 'Completar asignación de algoritmos', category: 'focus', completed: false },
-   { id: '3', title: 'Lectura: "The Creative Act"', category: 'wellness', completed: true },
-   { id: '4', title: 'Revisión de correos atrasados', category: 'admin', completed: false },
-   { id: '5', title: 'Yoga & Meditación (20m)', category: 'wellness', completed: false },
-];
+import { useTaskStore } from '@/store/taskStore';
 
 export default function TasksPage() {
-   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+   const { tasks, fetchTasks, addTask, toggleTask, deleteTask } = useTaskStore();
    const [newTask, setNewTask] = useState("");
+   const [selectedCategory, setSelectedCategory] = useState("focus");
+   const [selectedDate, setSelectedDate] = useState("");
    const { t } = useTranslation();
 
-   const toggleTask = (id: string) => {
-      setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+   useEffect(() => {
+      fetchTasks();
+   }, []);
+
+   const handleAddTask = () => {
+      if (!newTask.trim()) return;
+      addTask(newTask, selectedCategory, selectedDate || null);
+      setNewTask("");
    };
 
    const getCategoryColor = (category: string) => {
@@ -60,46 +53,64 @@ export default function TasksPage() {
                {/* LEFT COLUMN: Input & Tasks List */}
                <div className="mobile-order-1" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
-                  {/* SOFT INSET INPUT AREA */}
+                  {/* SOFT INSET INPUT AREA WITH CATEGORY & DATE */}
                   <div className="shadow-ambient" style={{
                      backgroundColor: 'var(--color-surface-container-lowest)',
                      borderRadius: 'var(--radius-xl)',
                      padding: '1.5rem',
-                     display: 'flex', gap: '1rem', alignItems: 'center'
+                     display: 'flex', flexDirection: 'column', gap: '1rem'
                   }}>
-                     <div style={{ flex: 1, position: 'relative' }}>
-                        <input
-                           value={newTask}
-                           onChange={(e) => setNewTask(e.target.value)}
-                           placeholder={t("TASKS_ADD_TASK_PLACEHOLDER")}
-                           style={{
-                              width: '100%',
-                              backgroundColor: 'var(--color-surface-container-high)',
-                              border: 'none',
-                              borderBottom: '2px solid transparent',
-                              borderRadius: 'var(--radius-md)',
-                              padding: '1.25rem 1.5rem',
-                              fontSize: '1rem',
-                              fontFamily: 'var(--font-body)',
-                              color: 'var(--color-on-surface)',
-                              outline: 'none',
-                              transition: 'all 0.3s ease',
-                              boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
-                           }}
-                           onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
-                           onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
-                        />
+                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <div style={{ flex: 1, position: 'relative' }}>
+                           <input
+                              value={newTask}
+                              onChange={(e) => setNewTask(e.target.value)}
+                              onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+                              placeholder={t("TASKS_ADD_TASK_PLACEHOLDER") || "Escribe una nueva tarea..."}
+                              style={{
+                                 width: '100%',
+                                 backgroundColor: 'var(--color-surface-container-high)',
+                                 border: 'none',
+                                 borderBottom: '2px solid transparent',
+                                 borderRadius: 'var(--radius-md)',
+                                 padding: '1.25rem 1.5rem',
+                                 fontSize: '1rem',
+                                 fontFamily: 'var(--font-body)',
+                                 color: 'var(--color-on-surface)',
+                                 outline: 'none',
+                                 transition: 'all 0.3s ease',
+                                 boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
+                              }}
+                              onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
+                              onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
+                           />
+                        </div>
+                        <button onClick={handleAddTask} style={{
+                           backgroundColor: 'var(--color-primary)', color: 'white', padding: '1.25rem', borderRadius: 'var(--radius-full)',
+                           display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s ease',
+                           boxShadow: '0 10px 20px rgba(100, 83, 162, 0.2)', border: 'none', cursor: 'pointer'
+                        }}
+                           onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+                           onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                        >
+                           <Plus size={24} />
+                        </button>
                      </div>
-                     <button style={{
-                        backgroundColor: 'var(--color-primary)', color: 'white', padding: '1.25rem', borderRadius: 'var(--radius-full)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s ease',
-                        boxShadow: '0 10px 20px rgba(100, 83, 162, 0.2)'
-                     }}
-                        onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-                        onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                     >
-                        <Plus size={24} />
-                     </button>
+
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', padding: '0.5rem', borderRadius: 'var(--radius-md)' }}>
+                           <Tag size={16} color="#6A6C76" />
+                           <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--color-on-surface)', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}>
+                              <option value="focus">Focus</option>
+                              <option value="wellness">Wellness</option>
+                              <option value="admin">Admin</option>
+                           </select>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', padding: '0.5rem', borderRadius: 'var(--radius-md)' }}>
+                           <CalendarIcon size={16} color="#6A6C76" />
+                           <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--color-on-surface)', outline: 'none', fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }} />
+                        </div>
+                     </div>
                   </div>
 
                   {/* PENDING TASKS LAYOUT */}
@@ -116,7 +127,7 @@ export default function TasksPage() {
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         {tasks.filter(t => !t.completed).map((task) => (
                            <div key={task.id}
-                              onClick={() => toggleTask(task.id)}
+                              onClick={() => toggleTask(task.id, true)}
                               style={{
                                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                                  padding: '1.25rem 1.5rem',
@@ -129,11 +140,18 @@ export default function TasksPage() {
                               onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                            >
                               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                                 {/* Colored indicator dot */}
                                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: getCategoryColor(task.category) }}></div>
-                                 <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)' }}>{task.title}</span>
+                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)' }}>{task.title}</span>
+                                    {task.scheduledDate && <span style={{ fontSize: '0.75rem', color: '#6A6C76', marginTop: '0.2rem' }}>🗓 {new Date(task.scheduledDate).toLocaleDateString()}</span>}
+                                 </div>
                               </div>
-                              <ChevronRight size={20} color="#c2c2c2" />
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                 <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
+                                    <Trash2 size={18} color="var(--color-error)" />
+                                 </button>
+                                 <ChevronRight size={20} color="#c2c2c2" />
+                              </div>
                            </div>
                         ))}
                      </div>
@@ -187,7 +205,7 @@ export default function TasksPage() {
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         {tasks.filter(t => t.completed).map((task) => (
                            <div key={task.id}
-                              onClick={() => toggleTask(task.id)}
+                              onClick={() => toggleTask(task.id, false)}
                               style={{
                                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                                  padding: '1.25rem 1.5rem',
@@ -200,9 +218,13 @@ export default function TasksPage() {
                            >
                               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: getCategoryColor(task.category) }}></div>
-                                 <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)', textDecoration: 'line-through' }}>{task.title}</span>
+                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)', textDecoration: 'line-through' }}>{task.title}</span>
+                                 </div>
                               </div>
-                              <Check size={20} color="var(--color-secondary)" />
+                              <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
+                                 <Trash2 size={18} color="var(--color-error)" />
+                              </button>
                            </div>
                         ))}
                      </div>

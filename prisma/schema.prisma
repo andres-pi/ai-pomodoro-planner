@@ -44,9 +44,10 @@ model Task {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String
-  category  String   @default("focus") // 'focus', 'wellness', 'admin'
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
+  category      String    @default("focus") // 'focus', 'wellness', 'admin'
+  completed     Boolean   @default(false)
+  scheduledDate DateTime? // Opcional, necesario para el calendario
+  createdAt     DateTime  @default(now())
 }
 
 model Event {
