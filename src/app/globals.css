@@ -38,6 +38,7 @@
 
 /* Soft Dark Mode Pallete */
 [data-theme="dark"] {
+  color-scheme: dark;
   --color-primary: #7b6ab7;
   --color-primary-dim: #9283cd;
   --color-primary-container: #322659;

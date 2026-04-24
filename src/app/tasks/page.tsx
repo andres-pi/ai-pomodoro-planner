@@ -53,63 +53,92 @@ export default function TasksPage() {
                {/* LEFT COLUMN: Input & Tasks List */}
                <div className="mobile-order-1" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
-                  {/* SOFT INSET INPUT AREA WITH CATEGORY & DATE */}
+                  {/* INLINE TASK CREATOR */}
                   <div className="shadow-ambient" style={{
                      backgroundColor: 'var(--color-surface-container-lowest)',
                      borderRadius: 'var(--radius-xl)',
-                     padding: '1.5rem',
-                     display: 'flex', flexDirection: 'column', gap: '1rem'
+                     padding: '1.25rem',
+                     display: 'flex', flexDirection: 'column', gap: '0.75rem'
                   }}>
-                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                     
+                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                         <div style={{ flex: 1, position: 'relative' }}>
                            <input
                               value={newTask}
                               onChange={(e) => setNewTask(e.target.value)}
                               onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
-                              placeholder={t("TASKS_ADD_TASK_PLACEHOLDER") || "Escribe una nueva tarea..."}
+                              placeholder={t("TASKS_ADD_TASK_PLACEHOLDER") || "What's your next priority?"}
                               style={{
                                  width: '100%',
-                                 backgroundColor: 'var(--color-surface-container-high)',
+                                 backgroundColor: 'transparent',
                                  border: 'none',
-                                 borderBottom: '2px solid transparent',
-                                 borderRadius: 'var(--radius-md)',
-                                 padding: '1.25rem 1.5rem',
-                                 fontSize: '1rem',
+                                 padding: '0.5rem 1rem',
+                                 fontSize: '1.125rem',
                                  fontFamily: 'var(--font-body)',
                                  color: 'var(--color-on-surface)',
                                  outline: 'none',
-                                 transition: 'all 0.3s ease',
-                                 boxShadow: 'inset 0 2px 4px rgba(49, 50, 56, 0.02)'
                               }}
-                              onFocus={(e) => e.target.style.borderBottom = '2px solid var(--color-primary)'}
-                              onBlur={(e) => e.target.style.borderBottom = '2px solid transparent'}
                            />
                         </div>
                         <button onClick={handleAddTask} style={{
-                           backgroundColor: 'var(--color-primary)', color: 'white', padding: '1.25rem', borderRadius: 'var(--radius-full)',
-                           display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s ease',
-                           boxShadow: '0 10px 20px rgba(100, 83, 162, 0.2)', border: 'none', cursor: 'pointer'
+                           backgroundColor: newTask.trim() ? 'var(--color-primary)' : 'var(--color-surface-container-high)', 
+                           color: newTask.trim() ? 'white' : 'var(--color-on-surface-variant)',
+                           padding: '1rem', borderRadius: '50%',
+                           display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease',
+                           boxShadow: newTask.trim() ? '0 10px 20px rgba(100, 83, 162, 0.2)' : 'none',
+                           border: 'none', cursor: newTask.trim() ? 'pointer' : 'default',
                         }}
-                           onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+                           onMouseDown={(e) => e.currentTarget.style.transform = newTask.trim() ? 'scale(0.95)' : 'none'}
                            onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
-                           <Plus size={24} />
+                           <Plus size={20} />
                         </button>
                      </div>
+                     
+                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.5rem' }}>
+                        
+                        {/* Category Pills */}
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                           {['focus', 'wellness', 'admin'].map((cat) => (
+                              <button key={cat} onClick={() => setSelectedCategory(cat)} style={{
+                                 padding: '0.4rem 1rem',
+                                 borderRadius: 'var(--radius-full)',
+                                 border: 'none',
+                                 fontSize: '0.75rem',
+                                 fontWeight: 600,
+                                 cursor: 'pointer',
+                                 transition: 'all 0.2s ease',
+                                 textTransform: 'capitalize',
+                                 backgroundColor: selectedCategory === cat ? getCategoryColor(cat) : 'var(--color-surface-container-low)',
+                                 color: selectedCategory === cat ? 'white' : 'var(--color-on-surface-variant)',
+                                 display: 'flex', alignItems: 'center', gap: '0.35rem'
+                              }}>
+                                 {selectedCategory === cat && <Check size={12} />}
+                                 {cat}
+                              </button>
+                           ))}
+                        </div>
 
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', padding: '0.5rem', borderRadius: 'var(--radius-md)' }}>
-                           <Tag size={16} color="#6A6C76" />
-                           <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--color-on-surface)', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}>
-                              <option value="focus">Focus</option>
-                              <option value="wellness">Wellness</option>
-                              <option value="admin">Admin</option>
-                           </select>
+                        {/* Date Picker Pill */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', padding: '0.4rem 1rem', borderRadius: 'var(--radius-full)' }}>
+                           <CalendarIcon size={14} color="var(--color-on-surface-variant)" />
+                           <input 
+                              type="date" 
+                              value={selectedDate} 
+                              onChange={(e) => setSelectedDate(e.target.value)} 
+                              style={{ 
+                                 background: 'transparent', 
+                                 border: 'none', 
+                                 color: selectedDate ? 'var(--color-on-surface)' : 'var(--color-on-surface-variant)', 
+                                 outline: 'none', 
+                                 fontSize: '0.75rem',
+                                 fontWeight: 600,
+                                 cursor: 'pointer', 
+                                 fontFamily: 'var(--font-body)' 
+                              }} 
+                           />
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface-container-low)', padding: '0.5rem', borderRadius: 'var(--radius-md)' }}>
-                           <CalendarIcon size={16} color="#6A6C76" />
-                           <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} style={{ background: 'transparent', border: 'none', color: 'var(--color-on-surface)', outline: 'none', fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }} />
-                        </div>
+
                      </div>
                   </div>
 
