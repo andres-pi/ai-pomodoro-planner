@@ -51,6 +51,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
 
+# Copiar la carpeta prisma para poder correr migraciones / db push desde el contenedor
+COPY --from=builder /app/prisma ./prisma
+# Copiar package.json para que npx sepa las versiones
+COPY --from=builder /app/package.json ./package.json
+
 USER nextjs
 
 EXPOSE 3000
