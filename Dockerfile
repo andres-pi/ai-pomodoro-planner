@@ -12,7 +12,7 @@ COPY package.json package-lock.json ./
 COPY prisma ./prisma/
 
 # Instalar TODAS las dependencias y generar Prisma Client
-RUN npm ci
+RUN npm install
 RUN npx prisma generate
 
 # 2. Reconstruir el código fuente solo cuando sea necesario
