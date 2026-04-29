@@ -44,7 +44,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       title,
       category,
       completed: false,
-      scheduledDate: scheduledDate || null,
+      scheduledDate: scheduledDate ? (scheduledDate.includes('T') ? scheduledDate : `${scheduledDate}T12:00:00Z`) : null,
       createdAt: new Date().toISOString(),
     };
     

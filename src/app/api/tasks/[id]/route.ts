@@ -36,7 +36,11 @@ export async function PATCH(req: Request, context: any) {
     if (title !== undefined) updateData.title = title;
     if (category !== undefined) updateData.category = category;
     if (completed !== undefined) updateData.completed = completed;
-    if (scheduledDate !== undefined) updateData.scheduledDate = scheduledDate ? new Date(scheduledDate) : null;
+    if (scheduledDate !== undefined) {
+      updateData.scheduledDate = scheduledDate 
+         ? new Date(scheduledDate.includes('T') ? scheduledDate : `${scheduledDate}T12:00:00Z`) 
+         : null;
+    }
 
     const task = await prisma.task.update({
       where: { id },

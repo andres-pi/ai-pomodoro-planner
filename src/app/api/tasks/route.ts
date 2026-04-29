@@ -56,7 +56,9 @@ export async function POST(req: Request) {
       data: {
         title,
         category: category || 'focus',
-        scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+        scheduledDate: scheduledDate 
+           ? new Date(scheduledDate.includes('T') ? scheduledDate : `${scheduledDate}T12:00:00Z`) 
+           : null,
         userId: user.id,
       },
     });
