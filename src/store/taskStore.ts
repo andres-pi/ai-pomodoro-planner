@@ -17,6 +17,7 @@ interface TaskState {
   addTask: (title: string, category: string, scheduledDate?: string | null) => Promise<void>;
   toggleTask: (id: string, completed: boolean) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
+  editTask: (id: string, updates: Partial<Task>) => Promise<void>;
 }
 
 export const useTaskStore = create<TaskState>((set, get) => ({
@@ -108,6 +109,30 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       if (!res.ok) {
          const resJson = await res.json();
          throw new Error(resJson.error || 'Failed to delete task');
+      }
+    } catch (error) {
+      // Revertir
+      set({ tasks: previousTasks });
+      console.error(error);
+    }
+  },
+
+  editTask: async (id, updates) => {
+    // Optimistic UI update
+    const previousTasks = get().tasks;
+    set((state) => ({
+      tasks: state.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
+    }));
+
+    try {
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) {
+         const resJson = await res.json();
+         throw new Error(resJson.error || 'Failed to edit task');
       }
     } catch (error) {
       // Revertir

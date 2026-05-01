@@ -1,13 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Check, ChevronRight, Plus, Sparkles, Calendar as CalendarIcon, Tag, Trash2 } from 'lucide-react';
+import { Check, ChevronRight, Plus, Sparkles, Calendar as CalendarIcon, Tag, Trash2, Edit2 } from 'lucide-react';
 import AuthOverlay from '@/components/AuthOverlay';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useTaskStore } from '@/store/taskStore';
 
 export default function TasksPage() {
-   const { tasks, fetchTasks, addTask, toggleTask, deleteTask } = useTaskStore();
+   const { tasks, fetchTasks, addTask, toggleTask, deleteTask, editTask } = useTaskStore();
    const [newTask, setNewTask] = useState("");
+   const [editingTask, setEditingTask] = useState<string | null>(null);
+   const [editTitle, setEditTitle] = useState("");
    const [selectedCategory, setSelectedCategory] = useState("focus");
    const [selectedDate, setSelectedDate] = useState("");
    const { t } = useTranslation();
@@ -20,6 +22,21 @@ export default function TasksPage() {
       if (!newTask.trim()) return;
       addTask(newTask, selectedCategory, selectedDate || null);
       setNewTask("");
+   };
+
+   const startEditing = (task: any) => {
+      setEditingTask(task.id);
+      setEditTitle(task.title);
+   };
+
+   const saveEdit = (id: string, e?: React.MouseEvent) => {
+      if (e) e.stopPropagation();
+      if (!editTitle.trim()) {
+         setEditingTask(null);
+         return;
+      }
+      editTask(id, { title: editTitle.trim() });
+      setEditingTask(null);
    };
 
    const getCategoryColor = (category: string) => {
@@ -170,17 +187,43 @@ export default function TasksPage() {
                            >
                               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: getCategoryColor(task.category) }}></div>
-                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)' }}>{task.title}</span>
-                                    {task.scheduledDate && <span style={{ fontSize: '0.75rem', color: '#6A6C76', marginTop: '0.2rem' }}>🗓 {new Date(task.scheduledDate).toLocaleDateString()}</span>}
-                                 </div>
-                              </div>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                 <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
-                                    <Trash2 size={18} color="var(--color-error)" />
-                                 </button>
-                                 <ChevronRight size={20} color="#c2c2c2" />
-                              </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                     {editingTask === task.id ? (
+                                        <input 
+                                           value={editTitle}
+                                           onChange={(e) => setEditTitle(e.target.value)}
+                                           onClick={(e) => e.stopPropagation()}
+                                           onKeyDown={(e) => {
+                                              if (e.key === 'Enter') saveEdit(task.id);
+                                              if (e.key === 'Escape') setEditingTask(null);
+                                           }}
+                                           autoFocus
+                                           style={{
+                                              fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)',
+                                              background: 'var(--color-surface-container)', border: '1px solid var(--color-primary)',
+                                              borderRadius: '4px', padding: '0.2rem 0.5rem', outline: 'none'
+                                           }}
+                                        />
+                                     ) : (
+                                        <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-on-surface)' }}>{task.title}</span>
+                                     )}
+                                     {task.scheduledDate && <span style={{ fontSize: '0.75rem', color: '#6A6C76', marginTop: '0.2rem' }}>🗓 {new Date(task.scheduledDate).toLocaleDateString()}</span>}
+                                  </div>
+                               </div>
+                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                  {editingTask === task.id ? (
+                                     <button onClick={(e) => saveEdit(task.id, e)} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px', padding: '0.3rem 0.6rem', fontSize: '0.8rem', fontWeight: 600 }}>
+                                        Guardar
+                                     </button>
+                                  ) : (
+                                     <button onClick={(e) => { e.stopPropagation(); startEditing(task); }} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5, padding: '4px' }}>
+                                        <Edit2 size={18} color="var(--color-primary)" />
+                                     </button>
+                                  )}
+                                  <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5, padding: '4px' }}>
+                                     <Trash2 size={18} color="var(--color-error)" />
+                                  </button>
+                               </div>
                            </div>
                         ))}
                      </div>

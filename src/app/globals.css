@@ -24,6 +24,8 @@
   /* Text & Accents - "No pure black" */
   --color-on-surface: #313238; 
   --color-outline-variant: rgba(49, 50, 56, 0.15); /* Ghost Border */
+  --color-error: #d32f2f;
+
 
   /* Roundness Scale */
   --radius-md: 24px;
@@ -57,6 +59,7 @@
   
   --color-on-surface: #f0f0f5; 
   --color-outline-variant: rgba(255, 255, 255, 0.08);
+  --color-error: #ef5350;
 }
 
 * {
