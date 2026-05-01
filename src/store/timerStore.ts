@@ -77,7 +77,7 @@ export const useTimerStore = create<TimerState>()(
           return {
             phase: isLongBreak ? 'LONG_BREAK' : 'SHORT_BREAK',
             timeLeft: isLongBreak ? state.longBreakDuration : state.shortBreakDuration,
-            isRunning: false, // Auto pausa al cambiar de fase
+            isRunning: !isLongBreak, // Auto-avance en descansos cortos, pero pausa en el descanso largo
           };
         } else {
           // Volviendo al trabajo (WORK) después de un descanso
@@ -86,7 +86,7 @@ export const useTimerStore = create<TimerState>()(
             phase: 'WORK',
             timeLeft: state.workDuration,
             currentSession: nextSession,
-            isRunning: false,
+            isRunning: state.phase !== 'LONG_BREAK', // Pausa antes de afrontar una nueva ronda entera
           };
         }
       }),

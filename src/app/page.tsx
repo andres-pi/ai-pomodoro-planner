@@ -5,8 +5,10 @@ import { useTimerStore } from '@/store/timerStore';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Home() {
-  const { currentSession, sessionsToLongBreak } = useTimerStore();
-  const progressPercent = Math.min(100, Math.round(((currentSession - 1) / sessionsToLongBreak) * 100));
+  const { currentSession, sessionsToLongBreak, phase } = useTimerStore();
+  const progressPercent = phase === 'LONG_BREAK' 
+    ? 100 
+    : Math.min(100, Math.round(((currentSession - 1) / sessionsToLongBreak) * 100));
   const { t } = useTranslation();
 
   return (
@@ -57,7 +59,7 @@ export default function Home() {
           <div className="shadow-ambient" style={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: 'var(--radius-lg)', padding: '2rem' }}>
             <h3 style={{ fontSize: '1rem', marginBottom: '1rem', fontWeight: 700 }}>{t("HOME_TODAY_PROGRESS_TITLE")}</h3>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: '1rem', flexWrap: 'wrap' }}>
-              <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>{t("HOME_TODAY_PROGRESS_SESSION")} {currentSession > sessionsToLongBreak ? sessionsToLongBreak : currentSession} {t("HOME_TODAY_PROGRESS_OF")} {sessionsToLongBreak}</span>
+              <span style={{ color: '#6A6C76', fontSize: '0.875rem' }}>{t("HOME_TODAY_PROGRESS_SESSION")} {phase === 'LONG_BREAK' ? sessionsToLongBreak : currentSession} {t("HOME_TODAY_PROGRESS_OF")} {sessionsToLongBreak}</span>
               <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>{progressPercent}%</span>
             </div>
             <div style={{ background: 'var(--color-surface-container-low)', height: '12px', borderRadius: '12px', marginTop: '1rem', overflow: 'hidden' }}>
