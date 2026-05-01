@@ -112,13 +112,13 @@ export default function SettingsPanel() {
           <button 
              type="button"
              onClick={() => setLanguage('es')}
-             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'es' ? 'white' : 'transparent', color: language === 'es' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'es' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'es' ? 'var(--color-surface-container-lowest)' : 'transparent', color: language === 'es' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'es' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
              Español
           </button>
           <button 
              type="button"
              onClick={() => setLanguage('en')}
-             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'en' ? 'white' : 'transparent', color: language === 'en' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'en' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
+             style={{ padding: '0.5rem 1rem', borderRadius: '16px', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease', backgroundColor: language === 'en' ? 'var(--color-surface-container-lowest)' : 'transparent', color: language === 'en' ? 'var(--color-primary)' : '#6A6C76', boxShadow: language === 'en' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none' }}>
              English
           </button>
         </div>
@@ -277,7 +277,7 @@ export default function SettingsPanel() {
                 </button>
               </div>
 
-              <button type="submit" disabled={status === "loading"} style={{ backgroundColor: 'var(--color-on-surface)', color: 'white', padding: '1rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', marginTop: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+              <button type="submit" disabled={status === "loading"} style={{ backgroundColor: 'var(--color-primary)', color: 'white', padding: '1rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', marginTop: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
                 {status === "loading" ? t("SETTINGS_LOADING") : (authMode === 'login' ? t("SETTINGS_SUBMIT_LOGIN") : t("SETTINGS_SUBMIT_REGISTER"))}
               </button>
 
@@ -287,7 +287,7 @@ export default function SettingsPanel() {
                 <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-surface-container-high)' }}></div>
               </div>
 
-              <button type="button" onClick={() => signIn('google')} style={{ backgroundColor: 'white', color: 'var(--color-on-surface)', padding: '1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', border: '1px solid var(--color-surface-container-high)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+              <button type="button" onClick={() => signIn('google')} style={{ backgroundColor: 'var(--color-surface-container-lowest)', color: 'var(--color-on-surface)', padding: '1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, height: '54px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', border: '1px solid var(--color-surface-container-high)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                 <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                   <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
                   <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
