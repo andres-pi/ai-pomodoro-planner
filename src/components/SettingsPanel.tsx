@@ -6,6 +6,7 @@ import { User, LogOut, Eye, EyeOff, Moon, Sun } from "lucide-react";
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLangStore } from '@/store/langStore';
 import { useThemeStore } from '@/store/themeStore';
+import toast from 'react-hot-toast';
 
 const InputField = ({ label, value, onChange, min = 1, max = 60 }: any) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
@@ -60,7 +61,12 @@ export default function SettingsPanel() {
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (authMode === 'login') {
-      await signIn('credentials', { email, password, redirect: false });
+      const res = await signIn('credentials', { email, password, redirect: false });
+      if (res?.error) {
+        toast.error("Credenciales incorrectas");
+      } else {
+        toast.success("Has iniciado sesión");
+      }
     } else {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -69,9 +75,10 @@ export default function SettingsPanel() {
       });
       if (res.ok) {
         await signIn('credentials', { email, password, redirect: false });
+        toast.success("Cuenta creada exitosamente");
       } else {
         const errorData = await res.json();
-        alert(errorData.error || "Error al registrarse");
+        toast.error(errorData.error || "Error al registrarse");
       }
     }
   };
@@ -224,7 +231,10 @@ export default function SettingsPanel() {
                 <span style={{ fontSize: '0.8rem', color: '#6A6C76' }}>{session?.user?.email}</span>
               </div>
             </div>
-            <button onClick={() => signOut()} style={{ color: 'var(--color-tertiary)', backgroundColor: 'transparent', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <button onClick={() => {
+              toast('Cerrando sesión...');
+              signOut();
+            }} style={{ color: 'var(--color-tertiary)', backgroundColor: 'transparent', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
               <LogOut size={16} /> {t("SETTINGS_LOGOUT")}
             </button>
           </div>

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import toast from 'react-hot-toast';
 
 type Phase = 'WORK' | 'SHORT_BREAK' | 'LONG_BREAK';
 
@@ -37,7 +38,16 @@ export const useTimerStore = create<TimerState>()(
       isRunning: false,
       currentSession: 1,
 
-      toggleTimer: () => set((state) => ({ isRunning: !state.isRunning })),
+      toggleTimer: () => {
+        // Pedir permisos de notificación la primera vez que se da play
+        if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+          Notification.requestPermission();
+        }
+        set((state) => {
+           if (!state.isRunning) toast.success(state.phase === 'WORK' ? '¡A enfocarse!' : 'Tiempo de descanso');
+           return { isRunning: !state.isRunning };
+        });
+      },
       pauseTimer: () => set({ isRunning: false }),
       
       tick: () => {
@@ -46,13 +56,16 @@ export const useTimerStore = create<TimerState>()(
           set({ timeLeft: state.timeLeft - 1 });
         } else {
           state.skipPhase();
-          // Lógica de Notificaciones de navegador (OPCIONAL)
-          if (typeof window !== 'undefined' && Notification.permission === "granted") {
+          // Lógica de Notificaciones
+          if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === "granted") {
             new Notification("El temporizador terminó", {
               body: `Es hora de ${state.phase === 'WORK' ? 'descansar' : 'volver al trabajo'}.`,
               icon: '/favicon.ico'
             });
           }
+          toast.success(`¡Sesión terminada! Es hora de ${state.phase === 'WORK' ? 'descansar' : 'volver al trabajo'}.`, {
+             duration: 5000,
+          });
         }
       },
 
@@ -89,6 +102,7 @@ export const useTimerStore = create<TimerState>()(
             nextState.timeLeft = newSettings.longBreakDuration;
           }
         }
+        toast.success('Configuración de Pomodoro actualizada');
         return nextState;
       }),
     }),

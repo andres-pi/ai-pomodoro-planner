@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import toast from 'react-hot-toast';
 
 export interface Task {
   id: string;
@@ -65,9 +66,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === tempId ? createdTask : t)),
       }));
+      toast.success('Nueva prioridad agregada');
     } catch (error) {
       // Revertir
       set((state) => ({ tasks: state.tasks.filter((t) => t.id !== tempId) }));
+      toast.error('No se pudo crear la tarea');
       console.error(error);
     }
   },
@@ -110,9 +113,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
          const resJson = await res.json();
          throw new Error(resJson.error || 'Failed to delete task');
       }
+      toast.success('Prioridad eliminada');
     } catch (error) {
       // Revertir
       set({ tasks: previousTasks });
+      toast.error('Error al eliminar la tarea');
       console.error(error);
     }
   },
@@ -134,9 +139,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
          const resJson = await res.json();
          throw new Error(resJson.error || 'Failed to edit task');
       }
+      toast.success('Prioridad editada');
     } catch (error) {
       // Revertir
       set({ tasks: previousTasks });
+      toast.error('Error al editar la tarea');
       console.error(error);
     }
   },
