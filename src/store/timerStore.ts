@@ -4,6 +4,36 @@ import toast from 'react-hot-toast';
 
 type Phase = 'WORK' | 'SHORT_BREAK' | 'LONG_BREAK';
 
+const playChime = () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    
+    const createTone = (frequency: number, delay: number) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(frequency, ctx.currentTime + delay);
+      
+      gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + delay + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 1.5);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 1.5);
+    };
+
+    createTone(880, 0);       // A5
+    createTone(1108.73, 0.1); // C#6
+  } catch (e) {
+    console.error("No se pudo reproducir el sonido", e);
+  }
+};
+
 interface TimerState {
   // Settings
   workDuration: number;
@@ -66,6 +96,7 @@ export const useTimerStore = create<TimerState>()(
           toast.success(`¡Sesión terminada! Es hora de ${state.phase === 'WORK' ? 'descansar' : 'volver al trabajo'}.`, {
              duration: 5000,
           });
+          playChime();
         }
       },
 
