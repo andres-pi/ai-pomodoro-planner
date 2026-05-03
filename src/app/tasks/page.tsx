@@ -112,10 +112,10 @@ export default function TasksPage() {
                         </button>
                      </div>
                      
-                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.5rem' }}>
+                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                         
                         {/* Category Pills */}
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                            {['focus', 'wellness', 'admin'].map((cat) => (
                               <button key={cat} onClick={() => setSelectedCategory(cat)} style={{
                                  padding: '0.4rem 1rem',

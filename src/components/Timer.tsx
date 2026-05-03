@@ -52,12 +52,16 @@ export default function Timer() {
       padding: '3rem 2rem',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'stretch',
+      width: '100%',
+      minWidth: 0,
+      minHeight: 0,
       position: 'relative'
     }}>
 
       {/* Decorative prompt on top */}
       <div style={{
+        alignSelf: 'center',
         backgroundColor: 'var(--color-background)',
         padding: '0.75rem 1.5rem',
         borderRadius: 'var(--radius-full)',
@@ -73,12 +77,19 @@ export default function Timer() {
       {/* Visual Clock Outline */}
       <div style={{
         position: 'relative',
-        width: '100%', maxWidth: '320px', aspectRatio: '1 / 1',
-        borderRadius: 'var(--radius-full)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        margin: '1.5rem 0 3rem 0'
+        alignSelf: 'center',
+        width: '100%',
+        maxWidth: '320px',
+        aspectRatio: '1 / 1',
+        minWidth: 0,
+        minHeight: 0,
+        margin: '1.5rem 0 3rem 0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 'var(--radius-full)'
       }}>
-
+          
         <div style={{
           position: 'absolute', inset: '0px', borderRadius: '50%',
           border: `8px solid var(--color-surface-container-low)`,
@@ -97,12 +108,15 @@ export default function Timer() {
           transition: 'all 1s linear'
         }}></div>
 
-        <div style={{ zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{
+          position: 'absolute', inset: '0px', zIndex: 10,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 1rem'
+        }}>
           <span className="text-label-disciplined" style={{ marginBottom: '0.5rem', color: '#6A6C76', fontSize: '0.65rem' }}>{t("TIMER_TIME_REMAINING")}</span>
           <span style={{ fontSize: 'clamp(3.5rem, 15vw, 5.5rem)', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-on-surface)', lineHeight: 1 }}>
             {formatTime(timeLeft)}
           </span>
-          <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.875rem' }}>
+          <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--color-secondary)', fontWeight: 600, fontSize: '0.875rem', flexWrap: 'wrap' }}>
             🎵 {t("TIMER_MUSIC_LOFI")}
           </div>
         </div>
@@ -110,8 +124,11 @@ export default function Timer() {
 
       {/* Controls Container using Glassmorphism pill embedded */}
       <div className="glass" style={{
-        display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 3vw, 1.5rem)',
-        padding: '1rem clamp(1rem, 4vw, 2rem)', borderRadius: 'var(--radius-full)'
+        alignSelf: 'center',
+        display: 'flex', alignItems: 'center', gap: 'clamp(0.25rem, 2vw, 1rem)',
+        padding: '0.75rem clamp(0.5rem, 2vw, 1rem)', borderRadius: 'var(--radius-full)',
+        maxWidth: '100%',
+        minWidth: 0
       }}>
         <button
           onClick={() => {
@@ -120,7 +137,7 @@ export default function Timer() {
             if (phase === 'LONG_BREAK') baseTime = longBreakDuration;
             updateSettings({ timeLeft: baseTime });
           }}
-          style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76' }}
+          style={{ width: 'clamp(32px, 10vw, 40px)', height: 'clamp(32px, 10vw, 40px)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76', flexShrink: 0 }}
         >
           <RotateCcw size={20} />
         </button>
@@ -128,22 +145,23 @@ export default function Timer() {
         <button
           onClick={toggleTimer}
           style={{
-            width: 'clamp(140px, 45vw, 200px)', height: '60px', borderRadius: 'var(--radius-full)',
+            width: 'clamp(120px, 40vw, 200px)', height: 'clamp(50px, 15vw, 60px)', borderRadius: 'var(--radius-full)',
             backgroundColor: getPhaseColor(), color: 'white',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
             boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-            transition: 'background-color 0.5s ease, transform 0.2s ease'
+            transition: 'background-color 0.5s ease, transform 0.2s ease',
+            flexShrink: 1
           }}
           onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.97)'}
           onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
           {isRunning ? <Pause size={24} /> : <Play size={24} style={{ marginLeft: '4px' }} />}
-          <span style={{ fontWeight: 700, letterSpacing: '0.05em', fontSize: '1rem' }}>{isRunning ? "PAUSE SESSION" : "START SESSION"}</span>
+          <span style={{ fontWeight: 700, letterSpacing: '0.05em', fontSize: 'clamp(0.8rem, 3vw, 1rem)' }}>{isRunning ? "PAUSE" : "START"}</span>
         </button>
 
         <button
           onClick={skipPhase}
-          style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76' }}
+          style={{ width: 'clamp(32px, 10vw, 40px)', height: 'clamp(32px, 10vw, 40px)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6A6C76', flexShrink: 0 }}
         >
           <SkipForward size={20} />
         </button>

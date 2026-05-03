@@ -73,6 +73,11 @@
   margin: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-on-surface);
@@ -168,6 +173,11 @@ input[type=number] {
   grid-template-columns: 1fr 1fr;
 }
 
+.responsive-grid > div, .responsive-grid-equal > div {
+  min-width: 0;
+  min-height: 0;
+}
+
 /* MOBILE AND TABLET SCREENS (< 1024px) */
 @media (max-width: 1024px) {
   .responsive-grid, .responsive-grid-equal {
@@ -191,6 +201,8 @@ input[type=number] {
     border-radius: 0;
     margin: 0;
     padding-bottom: 120px !important; /* Make room for bottom nav */
+    width: 100%;
+    max-width: 100vw;
   }
 
   /* Bottom Navigation Overrides */
